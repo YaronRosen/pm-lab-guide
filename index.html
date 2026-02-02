@@ -5,45 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PM Expert | Lab Setup Wizard</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-        .wizard-container { background: white; width: 100%; max-width: 600px; padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); box-sizing: border-box; }
+        :root {
+            --primary-blue: #2563eb;
+            --hover-blue: #1d4ed8;
+            --bg-gray: #f9fafb;
+            --text-dark: #111827;
+            --text-muted: #4b5563;
+            --border-color: #e5e7eb;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background-color: #f3f4f6; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            color: var(--text-dark);
+        }
+
+        .wizard-container { 
+            background: white; 
+            width: 100%; 
+            max-width: 550px; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); 
+            box-sizing: border-box; 
+        }
+
         .step { display: none; }
-        .step.active { display: block; animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .step.active { display: block; animation: fadeIn 0.4s ease-out; }
         
-        .progress-bar { display: none; justify-content: space-between; margin-bottom: 30px; position: relative; }
-        .progress-bar::before { content: ""; background: #e5e7eb; height: 2px; width: 100%; position: absolute; top: 15px; left: 0; z-index: 0; }
-        .progress-step { width: 30px; height: 30px; background: #e5e7eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 11px; z-index: 1; position: relative; color: #6b7280; }
-        .progress-step.active { background: #2563eb; color: white; }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(8px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
         
-        h1 { color: #111827; font-size: 1.6rem; margin: 0 0 20px 0; text-align: center; }
-        h2 { color: #111827; margin-top: 0; font-size: 1.3rem; border-bottom: 2px solid #f3f4f6; padding-bottom: 10px; }
-        p { color: #4b5563; line-height: 1.5; font-size: 14px; }
+        /* Progress Bar */
+        .progress-bar { display: none; justify-content: space-between; margin-bottom: 35px; position: relative; padding: 0 10px; }
+        .progress-bar::before { content: ""; background: var(--border-color); height: 2px; width: calc(100% - 20px); position: absolute; top: 15px; left: 10px; z-index: 0; }
+        .progress-step { width: 32px; height: 32px; background: white; border: 2px solid var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; z-index: 1; position: relative; color: var(--text-muted); transition: 0.3s; }
+        .progress-step.active { background: var(--primary-blue); border-color: var(--primary-blue); color: white; }
         
-        label { display: block; margin-bottom: 5px; font-weight: 600; color: #374151; font-size: 13px; }
-        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; margin-bottom: 15px; box-sizing: border-box; }
+        /* Typography */
+        h1 { font-size: 1.5rem; font-weight: 800; margin: 0 0 8px 0; text-align: center; letter-spacing: -0.025em; }
+        .subtitle { font-size: 0.9rem; color: var(--text-muted); text-align: center; margin-bottom: 30px; }
+        h2 { font-size: 1.25rem; font-weight: 700; margin-top: 0; margin-bottom: 16px; color: var(--text-dark); }
+        p { font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px; }
         
-        .system-desc { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 10px; margin: 15px 0; font-size: 13px; }
-        .code-container { position: relative; background: #1e293b; border-radius: 8px; margin: 15px 0; }
-        code { color: #f8fafc; padding: 15px; display: block; font-family: monospace; font-size: 12px; white-space: pre; overflow-x: auto; }
+        /* Form Elements */
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--text-dark); font-size: 0.85rem; }
+        input[type="text"] { width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1rem; margin-bottom: 20px; box-sizing: border-box; transition: border-color 0.2s; }
+        input[type="text"]:focus { outline: none; border-color: var(--primary-blue); ring: 2px var(--primary-blue); }
         
-        .nav-buttons { display: none; justify-content: space-between; margin-top: 25px; }
-        .btn { padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; text-decoration: none; display: inline-block; font-size: 14px; text-align: center; }
-        .btn-next { background: #2563eb; color: white; min-width: 100px; }
-        .btn-prev { background: #f3f4f6; color: #4b5563; min-width: 100px; }
+        /* Specialized Containers */
+        .system-desc { background: var(--bg-gray); border: 1px solid var(--border-color); padding: 16px; border-radius: 12px; margin: 20px 0; font-size: 0.9rem; }
+        .info-box { background: #fefce8; border-left: 4px solid #eab308; padding: 16px; margin: 20px 0; border-radius: 8px; font-size: 0.85rem; color: #854d0e; }
+        .code-container { position: relative; background: #1e293b; border-radius: 12px; margin: 20px 0; padding: 20px; overflow: hidden; }
+        code { color: #f8fafc; display: block; font-family: 'Fira Code', monospace; font-size: 0.8rem; white-space: pre; overflow-x: auto; }
+
+        /* Unified Button Design */
+        .nav-buttons { display: none; justify-content: space-between; margin-top: 32px; gap: 16px; }
         
-        /* Unified Action Buttons */
-        .action-btn { background: #2563eb; color: white; width: 100%; padding: 12px; border-radius: 6px; font-weight: 600; text-decoration: none; display: block; margin: 10px 0; box-sizing: border-box; }
-        .btn-launch { background: #059669; }
-        .btn-outline { border: 1px solid #2563eb; background: white; color: #2563eb; }
+        .btn { 
+            height: 48px;
+            padding: 0 24px; 
+            border-radius: 10px; 
+            font-weight: 600; 
+            font-size: 0.95rem;
+            cursor: pointer; 
+            border: none; 
+            transition: all 0.2s; 
+            text-decoration: none; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .btn-primary { background: var(--primary-blue); color: white; width: 100%; }
+        .btn-primary:hover { background: var(--hover-blue); transform: translateY(-1px); }
         
-        .info-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px; margin: 15px 0; border-radius: 4px; font-size: 13px; }
+        .btn-secondary { background: var(--bg-gray); color: var(--text-muted); border: 1px solid var(--border-color); flex: 1; }
+        .btn-secondary:hover { background: #f3f4f6; }
+        
+        .btn-next { flex: 2; background: var(--primary-blue); color: white; }
+        .btn-next:hover { background: var(--hover-blue); }
+
+        .center-wrap { display: flex; justify-content: center; width: 100%; }
+        
+        .verified-text { color: #059669; font-weight: 600; font-size: 0.85rem; display: none; margin-top: 8px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="wizard-container">
-    <h1>PM Instructor Lab Setup</h1>
+    <h1>Instructor Lab Setup</h1>
+    <div class="subtitle">Personalized AI Environment Wizard</div>
     
     <div class="progress-bar" id="progressBar">
         <div class="progress-step" id="p1">1</div>
@@ -57,62 +117,62 @@
     </div>
 
     <div class="step active" id="step0">
-        <h2>Welcome! Let's build your lab.</h2>
-        <p>Follow this wizard to deploy a live e-commerce environment for your Product Management students.</p>
+        <h2>Start Your Journey</h2>
+        <p>Enter your details below to customize your lab environment and track your students' progress.</p>
         <label>Full Name</label>
         <input type="text" id="instructorName" placeholder="e.g. Yaron Rosen">
         <label>Course Cohort</label>
-        <input type="text" id="courseCohort" placeholder="e.g. Feb-2026">
-        <button class="action-btn" onclick="initWizard()">Start My Setup</button>
+        <input type="text" id="courseCohort" placeholder="e.g. Spring 2026">
+        <button class="btn btn-primary" onclick="initWizard()">Initialize Wizard</button>
     </div>
 
     <div class="step" id="step1">
-        <h2 id="greetVercel">Connect Vercel</h2>
-        <div class="system-desc">☁️ <b>Vercel:</b> The cloud platform that hosts your store.</div>
-        <p>Please log in to your Vercel account. If you don't have one, sign up for a free "Hobby" account.</p>
-        <a href="https://vercel.com/login" target="_blank" class="action-btn btn-outline" onclick="this.innerText='Vercel Logged In ✓'">Login to Vercel</a>
+        <h2 id="greetVercel">Vercel Login</h2>
+        <div class="system-desc"><b>Hosting Platform:</b> Vercel manages the live cloud infrastructure for your store and database.</div>
+        <p>Please log in to your Vercel account in a new tab.</p>
+        <a href="https://vercel.com/login" target="_blank" class="btn btn-primary" onclick="showVerified('vVer')">Log in to Vercel</a>
+        <div id="vVer" class="verified-text">Connection ready ✓</div>
     </div>
 
     <div class="step" id="step2">
-        <h2 id="greetGithub">Connect GitHub</h2>
-        <div class="system-desc">🐙 <b>GitHub:</b> The repository that stores your store's code.</div>
-        <p>Ensure you are logged into GitHub so Vercel can sync your new lab code.</p>
-        <a href="https://github.com/login" target="_blank" class="action-btn btn-outline" onclick="this.innerText='GitHub Logged In ✓'">Login to GitHub</a>
+        <h2 id="greetGithub">GitHub Login</h2>
+        <div class="system-desc"><b>Code Storage:</b> GitHub stores your private lab blueprints. Vercel uses this to build your environment.</div>
+        <p>Ensure you are signed in to GitHub to sync your project.</p>
+        <a href="https://github.com/login" target="_blank" class="btn btn-primary" onclick="showVerified('gVer')">Log in to GitHub</a>
+        <div id="gVer" class="verified-text">GitHub connected ✓</div>
     </div>
 
     <div class="step" id="step3">
         <h2 id="greetStorage">Pre-Launch Checklist</h2>
-        <p>Vercel requires a database to build the store. We'll set this up during the launch process.</p>
+        <p>To prevent build errors, we must prepare the database connection.</p>
         <div class="info-box">
-            <b>Important:</b> After clicking Launch in the next step, you will see a "Deploy" screen. Click <b>Deploy</b>, then once it fails or starts, navigate to the <b>Storage</b> tab to connect <b>Neon Postgres</b>.
+            <b>Pro Tip:</b> In the next step, once you click "Launch," look for the <b>Storage</b> section immediately and select <b>Connect Neon Postgres</b>.
         </div>
-        <p>Check the image below for where to find the Storage tab later:</p>
-        <div style="background:#eee; height:100px; display:flex; align-items:center; justify-content:center; border-radius:8px; margin:10px 0;">[Image: Storage Tab Location]</div>
+        
     </div>
 
     <div class="step" id="step4">
-        <h2 id="greetLaunch">Launch Your Store</h2>
-        <p>Ready to deploy! This will create your personal lab environment.</p>
+        <h2 id="greetLaunch">Launch Environment</h2>
+        <p>Ready to deploy your personal lab. This process usually takes 2-3 minutes.</p>
         <div class="info-box">
-            1. If asked for <i>MEDUSA_ADMIN_ONBOARDING_TYPE</i>, type <b>nextjs</b>.<br>
-            2. Click the <b>Deploy</b> button.<br>
-            3. Return here and click Next.
+            <b>Variable:</b> nextjs<br>
+            <b>Storage:</b> Connect Neon Postgres
         </div>
-        <a id="deployLink" href="#" target="_blank" class="action-btn btn-launch">🚀 Launch My Store Setup</a>
+        <a id="deployLink" href="#" target="_blank" class="btn btn-primary">🚀 Launch Store Setup</a>
     </div>
 
     <div class="step" id="step5">
-        <h2 id="greetKey">Access Your Data Key</h2>
-        <p>Link the database and grab the connection key:</p>
-        <ol>
-            <li>Go to your <b>Vercel Dashboard</b>.</li>
-            <li>Select your project > <b>Storage</b> > <b>Neon</b>.</li>
+        <h2 id="greetKey">Retrieve Data Key</h2>
+        <p>Your store is live! Now grab the unique key to connect Claude AI to your database.</p>
+        <ol style="font-size: 0.9rem; color: var(--text-muted); padding-left: 20px;">
+            <li>Go to <b>Vercel Dashboard</b> > Select Project.</li>
+            <li>Go to <b>Storage</b> > <b>Neon</b>.</li>
             <li>Copy the <b>Postgres Connection String</b>.</li>
         </ol>
     </div>
 
     <div class="step" id="step6">
-        <h2 id="greetClaude">Connect to Claude</h2>
+        <h2 id="greetConfig">Connect to Claude</h2>
         <p>Open Claude Desktop (Settings > MCP > Edit Config) and paste this block:</p>
         <div class="code-container">
             <code>"postgresql": {
@@ -123,19 +183,21 @@
     </div>
 
     <div class="step" id="step7">
-        <h2 id="greetTest">Verify Connection</h2>
-        <div class="info-box">Ask Claude: "Connect to my database and list my products."</div>
+        <h2 id="greetTest">Final System Test</h2>
+        <div class="info-box" style="background: #f0fdf4; border-color: #22c55e; color: #166534;">
+            Ask Claude: "List the top 3 product categories by inventory count."
+        </div>
     </div>
 
     <div class="step" id="step8">
-        <h2>Lab is Ready!</h2>
-        <p>Congratulations! Your AI Product Lab is fully operational.</p>
-        <button class="action-btn" onclick="location.reload()">Start Over</button>
+        <h2>Setup Complete</h2>
+        <p>Congratulations! Your AI-powered Product Management lab is fully configured and ready for class.</p>
+        <button class="btn btn-primary" onclick="location.reload()">Restart Wizard</button>
     </div>
 
     <div class="nav-buttons" id="navBtns">
-        <button class="btn btn-prev" id="prevBtn" onclick="changeStep(-1)">Back</button>
-        <button class="btn btn-next" id="nextBtn" onclick="changeStep(1)">Next</button>
+        <button class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)">Back</button>
+        <button class="btn btn-next" id="nextBtn" onclick="changeStep(1)">Next Step</button>
     </div>
 </div>
 
@@ -146,20 +208,19 @@
     function initWizard() {
         const n = document.getElementById('instructorName').value.trim();
         const c = document.getElementById('courseCohort').value.trim();
-        if (!n || !c) { alert("Please fill in both fields."); return; }
+        if (!n || !c) { alert("Please complete all fields."); return; }
 
         instructorName = n.split(' ')[0];
         const safeN = n.replace(/\s+/g, '-').toLowerCase();
         const safeC = c.replace(/\s+/g, '-').toLowerCase();
         const projectName = `pm-lab-${safeN}-${safeC}`;
-        
         const baseUrl = "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default";
         const envParams = "env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs";
         document.getElementById('deployLink').href = `${baseUrl}&${envParams}&project-name=${projectName}&repository-name=${projectName}`;
         
-        const ids = ['greetVercel', 'greetGithub', 'greetStorage', 'greetLaunch', 'greetKey', 'greetClaude', 'greetTest'];
+        const ids = ['greetVercel', 'greetGithub', 'greetStorage', 'greetLaunch', 'greetKey', 'greetConfig', 'greetTest'];
         ids.forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText += `, ${instructorName}`; });
-
+        
         document.getElementById('progressBar').style.display = 'flex';
         document.getElementById('navBtns').style.display = 'flex';
         changeStep(1);
@@ -180,7 +241,11 @@
         }
 
         document.getElementById('prevBtn').style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
-        document.getElementById('nextBtn').innerText = (currentStep === 8) ? 'Finish' : 'Next';
+        document.getElementById('nextBtn').innerText = (currentStep === 8) ? 'Finish' : 'Next Step';
+    }
+
+    function showVerified(id) {
+        document.getElementById(id).style.display = 'block';
     }
 </script>
 
