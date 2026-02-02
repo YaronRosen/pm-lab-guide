@@ -9,15 +9,35 @@
             --primary-blue: #2563eb;
             --hover-blue: #1d4ed8;
             --bg-gray: #f9fafb;
-            --text-dark: #1f2937;
+            --text-dark: #111827; /* Deep black for max readability */
+            --text-muted: #4b5563;
             --border-color: #d1d5db;
         }
 
-        body { font-family: 'Inter', system-ui, sans-serif; background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; color: var(--text-dark); }
-        .wizard-container { background: white; width: 100%; max-width: 580px; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background-color: #f3f4f6; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            color: var(--text-dark);
+        }
+
+        .wizard-container { 
+            background: white; 
+            width: 100%; 
+            max-width: 580px; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            box-sizing: border-box; 
+        }
+
+        /* Typography & Layout */
         h1 { font-size: 1.5rem; font-weight: 800; text-align: center; color: var(--text-dark); margin-bottom: 30px; }
-        h2 { font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; border-bottom: 2px solid var(--bg-gray); padding-bottom: 10px; }
+        h2 { font-size: 1.3rem; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; border-bottom: 2px solid var(--bg-gray); padding-bottom: 10px; }
         p { font-size: 1rem; line-height: 1.6; color: var(--text-dark); margin-bottom: 20px; }
         
         .step { display: none; }
@@ -26,26 +46,31 @@
 
         .progress-bar { display: none; justify-content: space-between; margin-bottom: 40px; position: relative; }
         .progress-bar::before { content: ""; background: var(--border-color); height: 2px; width: 100%; position: absolute; top: 15px; left: 0; z-index: 0; }
-        .progress-step { width: 32px; height: 32px; background: white; border: 2px solid var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; z-index: 1; color: #6b7280; }
+        .progress-step { width: 32px; height: 32px; background: white; border: 2px solid var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; z-index: 1; color: var(--text-muted); }
         .progress-step.active { background: var(--primary-blue); border-color: var(--primary-blue); color: white; }
 
         label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.9rem; color: var(--text-dark); }
         input[type="text"] { width: 100%; padding: 14px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 1rem; margin-bottom: 20px; box-sizing: border-box; color: var(--text-dark); background: #ffffff; }
-        
+        input[type="text"]:focus { border-color: var(--primary-blue); outline: none; }
+
         .info-box { background: #f0f7ff; border-left: 5px solid var(--primary-blue); padding: 20px; margin: 20px 0; border-radius: 8px; }
-        .copy-box { background: #f8fafc; padding: 12px; border-radius: 8px; font-family: monospace; margin: 10px 0; display: block; text-align: center; border: 2px dashed var(--primary-blue); color: var(--primary-blue); font-weight: 800; font-size: 1rem; }
+        .info-box b { color: var(--primary-blue); }
+        .info-box li { margin-bottom: 12px; color: var(--text-dark); font-size: 0.95rem; line-height: 1.5; }
+        
+        .copy-box { background: #f8fafc; padding: 12px; border-radius: 8px; font-family: monospace; margin: 10px 0; display: block; text-align: center; border: 2px dashed var(--primary-blue); color: var(--primary-blue); font-weight: 800; font-size: 1.05rem; }
         
         .code-container { background: #111827; border-radius: 12px; padding: 20px; margin: 15px 0; }
         code { color: #f3f4f6; font-family: 'Fira Code', monospace; font-size: 0.85rem; line-height: 1.5; white-space: pre; display: block; overflow-x: auto; }
 
         .btn-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 20px; }
-        .btn-action { background: var(--primary-blue); color: white; width: 100%; max-width: 350px; height: 52px; border-radius: 10px; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1rem; }
+        .btn-action { background: var(--primary-blue); color: white; width: 100%; max-width: 380px; height: 52px; border-radius: 10px; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1rem; transition: 0.2s; }
+        .btn-action:hover { background: var(--hover-blue); }
         
         .nav-buttons { display: none; justify-content: space-between; margin-top: 40px; gap: 20px; }
-        .nav-btn { height: 50px; padding: 0 30px; border-radius: 10px; font-weight: 700; cursor: pointer; border: none; min-width: 130px; font-size: 1rem; }
+        .nav-btn { height: 50px; padding: 0 30px; border-radius: 10px; font-weight: 700; cursor: pointer; border: none; min-width: 135px; font-size: 1rem; }
         .btn-next { background: var(--primary-blue); color: white; flex-grow: 1; }
         .btn-next:disabled { background: #d1d5db; cursor: not-allowed; color: #9ca3af; }
-        .badge { background: #dcfce7; color: #166534; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 800; display: none; margin-bottom: 20px; text-align: center; }
+        .badge { background: #dcfce7; color: #166534; padding: 10px 18px; border-radius: 25px; font-size: 0.85rem; font-weight: 800; display: none; margin-bottom: 20px; text-align: center; }
     </style>
 </head>
 <body>
@@ -64,47 +89,51 @@
         <div class="btn-container"><button class="btn-action" onclick="initWizard()">Initialize Lab</button></div>
     </div>
 
-    <div class="step" id="step1"><h2>Step 1: Vercel</h2><p>Vercel hosts your servers. Please log in.</p><div class="btn-container"><a href="https://vercel.com/login" target="_blank" class="btn-action">Login to Vercel</a></div></div>
-    <div class="step" id="step2"><h2>Step 2: GitHub</h2><p>GitHub stores your code. Please log in.</p><div class="btn-container"><a href="https://github.com/login" target="_blank" class="btn-action">Login to GitHub</a></div></div>
+    <div class="step" id="step1"><h2>Step 1: Vercel</h2><p>Vercel will host your database and server. Please log in.</p><div class="btn-container"><a href="https://vercel.com/login" target="_blank" class="btn-action">Login to Vercel</a></div></div>
+    <div class="step" id="step2"><h2>Step 2: GitHub</h2><p>GitHub stores your lab code. Please log in.</p><div class="btn-container"><a href="https://github.com/login" target="_blank" class="btn-action">Login to GitHub</a></div></div>
 
     <div class="step" id="step3">
         <h2 id="h3">Step 3: Database Infrastructure</h2>
+        <p>Your lab requires a Postgres database to store product and order data.</p>
         <div class="info-box">
             <b>Action Required:</b>
             <ul style="margin: 15px 0; padding-left: 20px;">
                 <li>Vercel Dashboard > <b>Add New...</b> > <b>Storage</b> > <b>Neon</b> > <b>Create</b>.</li>
                 <li>Press <b>Continue</b>. Name it: <span id="uniqueDbName" class="copy-box">...</span></li>
-                <li>Press <b>Create</b> > <b>Done</b>.</li>
+                <li>Press <b>Create</b>, then press <b>Done</b>.</li>
                 <li>Go to the <b>Quickstart</b> tab > <b>.env.local</b> section.</li>
                 <li>Click <b>Show secret</b> (eye icon) and copy the <b>DATABASE_URL</b>.</li>
             </ul>
         </div>
-        <label>Paste the DATABASE_URL here:</label>
+        
+        <label>Paste the DATABASE_URL here to unlock the next step:</label>
         <input type="text" id="dbUrlInput" placeholder="postgresql://..." oninput="validateKey()">
         <div id="validBadge" class="badge">Connection Secure ✓</div>
     </div>
 
     <div class="step" id="step4">
         <h2 id="h4">Step 4: Deploy Store</h2>
-        <p>The button below will pre-configure your store settings in Vercel to prevent errors.</p>
+        <p>This step connects your code to the database you just created. Settings are pre-configured.</p>
         <div class="info-box">
-            <b>On the Vercel screen, simply:</b><br>
+            <b>On the Vercel screen:</b><br>
             <ul style="margin: 10px 0; padding-left: 20px;">
                 <li>Verify <b>Framework Preset</b> shows <b>Next.js</b>.</li>
-                <li>Verify <b>Environment Variable</b> value is <b>nextjs</b>.</li>
+                <li>Verify <b>Environment Variable</b> (MEDUSA_ADMIN_ONBOARDING_TYPE) value is <b>nextjs</b>.</li>
                 <li>Click the black <b>Deploy</b> button.</li>
             </ul>
         </div>
+        
         <div class="btn-container"><a id="deployLink" href="#" target="_blank" class="btn-action">🚀 Launch Pre-Configured Deployment</a></div>
     </div>
 
     <div class="step" id="step5">
         <h2 id="h5">Step 5: Connect Claude AI</h2>
+        <p>To enable AI analysis, copy this configuration into <b>Claude Desktop (Settings > MCP > Edit Config)</b>.</p>
         <div class="code-container"><code id="mcpConfig">"postgresql": { ... }</code></div>
     </div>
 
-    <div class="step" id="step6"><h2 id="h6">Step 6: Verify</h2><p>Ask Claude: "List my product categories."</p></div>
-    <div class="step" id="step7"><h2>Setup Complete</h2><p>Your lab is ready.</p><div class="btn-container"><button class="btn-action" onclick="location.reload()">Finish</button></div></div>
+    <div class="step" id="step6"><h2 id="h6">Step 6: Verify Connection</h2><p>Ask Claude AI: "Connect to my database and list the product categories".</p></div>
+    <div class="step" id="step7"><h2>Setup Complete</h2><p>Your lab environment is fully operational.</p><div class="btn-container"><button class="btn-action" onclick="location.reload()">Finish & Reset</button></div></div>
 
     <div class="nav-buttons" id="navBtns">
         <button class="nav-btn" style="background:#f1f5f9; color:#475569;" id="prevBtn" onclick="changeStep(-1)">Back</button>
@@ -117,15 +146,22 @@
     let finalProjectName = "";
 
     function validateKey() {
-        const input = document.getElementById('dbUrlInput').value.trim();
+        const input = document.getElementById('dbUrlInput').value.trim(); // TRIMS INVISIBLE SPACES
         const nextBtn = document.getElementById('nextBtn');
         const badge = document.getElementById('validBadge');
+        
+        // ACCEPT BOTH postgres:// AND postgresql://
         const isVal = input.toLowerCase().includes('postgres://') || input.toLowerCase().includes('postgresql://');
         
         if (isVal && input.length > 20) {
             nextBtn.disabled = false;
             badge.style.display = 'block';
-            document.getElementById('mcpConfig').innerText = `"postgresql": {\n  "command": "npx",\n  "args": ["-y", "@modelcontextprotocol/server-postgres", "${input}"]\n}`;
+            
+            // Format URL for Claude
+            let formattedUrl = input;
+            if (!formattedUrl.includes('?')) formattedUrl += '?sslmode=require';
+
+            document.getElementById('mcpConfig').innerText = `"postgresql": {\n  "command": "npx",\n  "args": ["-y", "@modelcontextprotocol/server-postgres", "${formattedUrl}"]\n}`;
         } else {
             nextBtn.disabled = true;
             badge.style.display = 'none';
@@ -135,14 +171,14 @@
     function initWizard() {
         const n = document.getElementById('instructorName').value.trim();
         const c = document.getElementById('courseCohort').value.trim();
-        if (!n || !c) return alert("Fill in your details.");
+        if (!n || !c) return alert("Please fill in your name and cohort ID.");
         
         const timestamp = new Date().getTime().toString().slice(-6);
         finalProjectName = `pm-lab-${n.replace(/\s+/g, '-').toLowerCase()}-${c.replace(/\s+/g, '-').toLowerCase()}-${timestamp}`;
         
         document.getElementById('uniqueDbName').innerText = finalProjectName;
         
-        // AUTOMATIC PRE-CONFIGURATION: Framework + Env Variable injected in the URL
+        // AUTO-INJECT FRAMEWORK & ENV VARS IN LINK
         document.getElementById('deployLink').href = `https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default&env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs&project-name=${finalProjectName}&repository-name=${finalProjectName}&framework=nextjs`;
         
         const firstName = n.split(' ')[0];
