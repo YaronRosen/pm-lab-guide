@@ -66,46 +66,53 @@
 
     <div class="step" id="step1">
         <h2 id="greetVercel">Vercel Connection</h2>
-        <div class="system-desc">☁️ <b>Vercel:</b> Hosts your website and database.</div>
-        <p>Log in or create a Vercel account.</p>
+        <div class="system-desc">☁️ <b>Vercel:</b> This platform hosts your website and database, making your lab live on the web.</div>
+        <p>Please log in or create a Vercel account.</p>
         <a href="https://vercel.com/login" target="_blank" class="btn btn-outline" onclick="this.innerText='Verified ✓'">Login to Vercel</a>
     </div>
 
     <div class="step" id="step2">
         <h2 id="greetGithub">GitHub Connection</h2>
-        <div class="system-desc">🐙 <b>GitHub:</b> Stores your code vault.</div>
+        <div class="system-desc">🐙 <b>GitHub:</b> This stores the "blueprint" (code) for your store. Vercel connects here to build your environment.</div>
         <p>Ensure you are logged into GitHub.</p>
         <a href="https://github.com/login" target="_blank" class="btn btn-outline" onclick="this.innerText='Verified ✓'">Login to GitHub</a>
     </div>
 
     <div class="step" id="step3">
         <h2 id="greetClaude">Prepare Claude Desktop</h2>
-        <div class="system-desc">🤖 <b>Claude:</b> Use the <b>Desktop App</b> for the lab.</div>
+        <div class="system-desc">🤖 <b>Claude AI:</b> You must use the <b>Claude Desktop App</b> for the database connection to work.</div>
+        <p>Make sure it is installed and you are logged in.</p>
         <a href="https://claude.ai/download" target="_blank" class="btn btn-outline">Download Claude Desktop</a>
     </div>
 
     <div class="step" id="step4">
         <h2 id="greetLaunch">Launch Your Store</h2>
-        <p>Ready to deploy! Click below to create your personal lab.</p>
+        <p>Ready to deploy! Click the button below to create your lab environment.</p>
         <div class="info-box">
-            • If asked for <i>ONBOARDING_TYPE</i>, type <b>nextjs</b>.<br>
-            • Click <b>"Connect Neon Postgres"</b> under Storage.
+            <strong>On the Vercel screen:</strong><br>
+            1. If asked for <i>MEDUSA_ADMIN_ONBOARDING_TYPE</i>, type <b>nextjs</b>.<br>
+            2. Click the <b>Deploy</b> button.<br>
+            3. <b>Wait:</b> The build process will start. Once it starts, return here and click Next.
         </div>
         <a id="deployLink" href="#" target="_blank" class="btn btn-external">🚀 Launch My Store Setup →</a>
     </div>
 
     <div class="step" id="step5">
-        <h2 id="greetKey">Get Your Data Key</h2>
+        <h2 id="greetKey">Connect Database Storage</h2>
+        <p>While the project is building, we need to add the database manually:</p>
         <ol>
-            <li>Go to <b><a href="https://vercel.com/dashboard" target="_blank">Vercel Dashboard</a></b>.</li>
-            <li>Select your project > <b>Storage</b> > <b>Neon</b>.</li>
-            <li>Copy the <b>Postgres Connection String</b>.</li>
+            <li>Go to your <b><a href="https://vercel.com/dashboard" target="_blank">Vercel Dashboard</a></b>.</li>
+            <li>Click on your new project (the one currently deploying).</li>
+            <li>Click the <b>Storage</b> tab in the top navigation menu.</li>
+            <li>Click <b>Connect Database</b> and select <b>Neon (Postgres)</b>.</li>
+            <li>Once connected, copy the <b>Postgres Connection String</b>.</li>
         </ol>
         
     </div>
 
     <div class="step" id="step6">
-        <h2 id="greetConfig">Connect Claude</h2>
+        <h2 id="greetConfig">Connect to Claude</h2>
+        <p>Copy the code below and paste it into Claude Desktop (Settings > MCP > Edit Config):</p>
         <div class="code-container">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <code id="mcpCode">"postgresql": {
@@ -113,17 +120,21 @@
   "args": ["-y", "@modelcontextprotocol/server-postgres", "PASTE_URL_HERE?sslmode=require"]
 }</code>
         </div>
+        <p><small><b>Final Step:</b> Replace 'PASTE_URL_HERE' with your connection string and Save.</small></p>
     </div>
 
     <div class="step" id="step7">
-        <h2 id="greetTest">Run a Test</h2>
-        <div class="info-box">Ask Claude: "How many products are in my store?"</div>
+        <h2 id="greetTest">Verify Connection</h2>
+        <p>Open a new chat in Claude and ask:</p>
+        <div class="info-box" style="background: #f0fdf4; border-color: #22c55e; color: #166534;">
+            "Connect to my database and tell me how many products are currently in stock."
+        </div>
     </div>
 
     <div class="step" id="step8">
-        <h2>Success!</h2>
-        <p>Lab is ready.</p>
-        <button class="btn btn-next" style="width:100%" onclick="location.reload()">Reset</button>
+        <h2>Lab is Ready!</h2>
+        <p>Congratulations! Your AI-powered Product Lab is fully operational.</p>
+        <button class="btn btn-next" style="width:100%" onclick="location.reload()">Start Over</button>
     </div>
 
     <div class="nav-buttons" id="navBtns">
@@ -139,7 +150,7 @@
     function initWizard() {
         const nameVal = document.getElementById('instructorName').value.trim();
         const cohortVal = document.getElementById('courseCohort').value.trim();
-        if (!nameVal || !cohortVal) { alert("Please fill in both fields."); return; }
+        if (!nameVal || !cohortVal) { alert("Please enter your name and cohort."); return; }
 
         instructorName = nameVal.split(' ')[0];
         const safeName = nameVal.replace(/\s+/g, '-').toLowerCase();
@@ -150,7 +161,6 @@
         const envParams = "env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs";
         document.getElementById('deployLink').href = `${baseUrl}&${envParams}&project-name=${projectName}&repository-name=${projectName}`;
         
-        // Personalize
         const greetings = ['greetVercel', 'greetGithub', 'greetClaude', 'greetLaunch', 'greetKey', 'greetConfig', 'greetTest'];
         greetings.forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText += `, ${instructorName}`; });
 
@@ -160,7 +170,6 @@
     }
 
     function changeStep(n) {
-        // Hide ALL steps
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.progress-step').forEach(p => p.classList.remove('active'));
 
@@ -168,16 +177,12 @@
         if (currentStep < 0) currentStep = 0;
         if (currentStep > 8) { location.reload(); return; }
 
-        // Show Current Step
         document.getElementById('step' + currentStep).classList.add('active');
-        
-        // Handle Progress Bar Highlights
         for (let i = 1; i <= currentStep; i++) {
             const p = document.getElementById('p' + i);
             if (p) p.classList.add('active');
         }
 
-        // Button Visibility
         document.getElementById('prevBtn').style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
         document.getElementById('nextBtn').innerText = (currentStep === 8) ? 'Finish' : 'Next';
     }
