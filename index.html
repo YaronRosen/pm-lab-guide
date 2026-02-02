@@ -99,6 +99,7 @@
         <div class="progress-step" id="p5">5</div>
         <div class="progress-step" id="p6">6</div>
         <div class="progress-step" id="p7">7</div>
+        <div class="progress-step" id="p8">8</div>
     </div>
 
     <div class="step active" id="step0">
@@ -130,34 +131,45 @@
     </div>
 
     <div class="step" id="step3">
-        <h2 id="h3">Database Infrastructure</h2>
-        <p>We will now provision a <b>Neon Postgres</b> database for your store.</p>
+        <h2 id="h3">Database Selection</h2>
+        <p>First, we need to select the right database provider in Vercel.</p>
         <div class="info-box">
-            <b>Action Required:</b><br>
-            1. Go to your Vercel Dashboard, click <b>Add New...</b> and select <b>Storage</b>.<br>
-            2. Choose <b>Neon</b> and click <b>Create</b>.<br>
-            3. In the <b>Database Name (*)</b> field, paste this exact name:<br>
-            <span id="uniqueDbName" class="copy-box">Generating...</span><br>
-            4. Click <b>Create</b>, then click <b>Connect</b> and copy the <b>Postgres Connection String</b>.
+            1. Go to your Vercel Dashboard.<br>
+            2. Click <b>Add New...</b> and select <b>Storage</b>.<br>
+            3. Choose <b>Neon (Serverless Postgres)</b>.<br>
+            4. Click the <b>Create</b> button.<br>
+            5. On the next screen, click <b>Continue</b>.
         </div>
         
     </div>
 
     <div class="step" id="step4">
-        <h2 id="h4">Deploy Lab</h2>
-        <p>Now, launch your deployment. The project name will match your database name exactly.</p>
+        <h2 id="h4">Provision Database</h2>
+        <p>Now, let's name your infrastructure to match your course details.</p>
         <div class="info-box">
-            <b>Important:</b><br>
-            • Variable: <code>MEDUSA_ADMIN_ONBOARDING_TYPE</code> = <code>nextjs</code>.<br>
-            • Repository Name: Must be <b><span id="uniqueRepoName">...</span></b>
+            1. In the <b>Database Name (*)</b> field, paste this exact name:<br>
+            <span id="uniqueDbName" class="copy-box">Generating...</span><br>
+            2. Click the black <b>Create</b> button at the bottom.<br>
+            3. Once created, click <b>Connect</b> and copy the <b>Postgres Connection String</b>.
+        </div>
+        
+    </div>
+
+    <div class="step" id="step5">
+        <h2 id="h5">Deploy Lab</h2>
+        <p>Launch your deployment. Your project name will match your database name exactly.</p>
+        <div class="info-box">
+            <b>Important Variable:</b><br>
+            Set <code>MEDUSA_ADMIN_ONBOARDING_TYPE</code> to <code>nextjs</code>.<br>
+            Then click the <b>Deploy</b> button.
         </div>
         <div class="btn-container">
             <a id="deployLink" href="#" target="_blank" class="btn-action">🚀 Launch Store Deployment</a>
         </div>
     </div>
 
-    <div class="step" id="step5">
-        <h2 id="h5">Claude AI Analyst</h2>
+    <div class="step" id="step6">
+        <h2 id="h6">Claude AI Analyst</h2>
         <p>Paste this config into Claude Desktop (Settings > MCP > Edit Config) to link the AI.</p>
         <div class="code-container">
             <code>"postgresql": {
@@ -165,17 +177,16 @@
   "args": ["-y", "@modelcontextprotocol/server-postgres", "PASTE_URL_HERE?sslmode=require"]
 }</code>
         </div>
-        <p><small>Replace <code>PASTE_URL_HERE</code> with the string from Step 3.</small></p>
-    </div>
-
-    <div class="step" id="step6">
-        <h2 id="h6">Final Test</h2>
-        <div class="info-box">Ask Claude: "Connect to my database and list the top 3 categories."</div>
     </div>
 
     <div class="step" id="step7">
+        <h2 id="h7">System Test</h2>
+        <div class="info-box">Ask Claude: "Connect to my database and list the product categories."</div>
+    </div>
+
+    <div class="step" id="step8">
         <h2>Setup Complete</h2>
-        <p>Congratulations! Your AI Product Lab is ready.</p>
+        <p>Congratulations! Your AI Product Lab is ready for class.</p>
         <div class="btn-container">
             <button class="btn-action" onclick="location.reload()">Finish</button>
         </div>
@@ -208,18 +219,16 @@
         const safeN = n.replace(/\s+/g, '-').toLowerCase();
         const safeC = c.replace(/\s+/g, '-').toLowerCase();
         
-        // Final naming convention: pm-lab-name-cohort-timestamp
         const timestamp = getTimestamp();
         const projectName = `pm-lab-${safeN}-${safeC}-${timestamp}`;
         
         document.getElementById('uniqueDbName').innerText = projectName;
-        document.getElementById('uniqueRepoName').innerText = projectName;
         
         const baseUrl = "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default";
         const envParams = "env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs";
         document.getElementById('deployLink').href = `${baseUrl}&${envParams}&project-name=${projectName}&repository-name=${projectName}`;
         
-        for(let i=1; i<=6; i++) {
+        for(let i=1; i<=7; i++) {
             const el = document.getElementById('h'+i);
             if(el) el.innerText += `, ${instructorName}`;
         }
@@ -233,14 +242,14 @@
         document.querySelectorAll('.progress-step').forEach(p => p.classList.remove('active'));
         currentStep += n;
         if (currentStep < 0) currentStep = 0;
-        if (currentStep > 7) { location.reload(); return; }
+        if (currentStep > 8) { location.reload(); return; }
         document.getElementById('step' + currentStep).classList.add('active');
         for (let i = 1; i <= currentStep; i++) {
             const p = document.getElementById('p' + i);
             if (p) p.classList.add('active');
         }
         document.getElementById('prevBtn').style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
-        document.getElementById('nextBtn').innerText = (currentStep === 7) ? 'Finish' : 'Next Step';
+        document.getElementById('nextBtn').innerText = (currentStep === 8) ? 'Finish' : 'Next Step';
     }
 </script>
 
