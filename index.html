@@ -12,7 +12,7 @@
             --text-dark: #111827;
             --text-muted: #4b5563;
             --border-color: #e5e7eb;
-            --disabled-gray: #9ca3af;
+            --disabled-gray: #d1d5db;
         }
 
         body { 
@@ -83,9 +83,10 @@
         .nav-btn { height: 44px; padding: 0 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 0.9rem; min-width: 110px; }
         .btn-back { background: var(--bg-gray); color: var(--text-muted); border: 1px solid var(--border-color); }
         .btn-next { background: var(--primary-blue); color: white; flex-grow: 1; }
-        .btn-next:disabled { background: var(--disabled-gray); cursor: not-allowed; opacity: 0.6; }
+        .btn-next:disabled { background: var(--disabled-gray); cursor: not-allowed; opacity: 0.5; }
         
         .copy-box { background: #f3f4f6; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; margin: 10px 0; display: block; text-align: center; border: 2px dashed var(--primary-blue); color: var(--primary-blue); font-weight: bold; }
+        .validation-msg { font-size: 0.8rem; margin-top: -15px; margin-bottom: 15px; display: none; }
     </style>
 </head>
 <body>
@@ -117,42 +118,33 @@
 
     <div class="step" id="step1">
         <h2 id="h1">Vercel Cloud</h2>
-        <p>Login to Vercel to host your personal laboratory servers.</p>
-        <div class="btn-container">
-            <a href="https://vercel.com/login" target="_blank" class="btn-action">Login to Vercel</a>
-        </div>
+        <div class="btn-container"><a href="https://vercel.com/login" target="_blank" class="btn-action">Login to Vercel</a></div>
     </div>
-
     <div class="step" id="step2">
         <h2 id="h2">GitHub Storage</h2>
-        <p>Login to GitHub to store your lab code blueprints.</p>
-        <div class="btn-container">
-            <a href="https://github.com/login" target="_blank" class="btn-action">Login to GitHub</a>
-        </div>
+        <div class="btn-container"><a href="https://github.com/login" target="_blank" class="btn-action">Login to GitHub</a></div>
     </div>
 
     <div class="step" id="step3">
         <h2 id="h3">Database Infrastructure</h2>
-        <p>Provision your <b>Neon Postgres</b> database for the store.</p>
+        <p>Provision your <b>Neon Postgres</b> database.</p>
         <div class="info-box">
             <b>Action Required:</b><br>
             1. Go to Vercel Dashboard > <b>Add New...</b> > <b>Storage</b>.<br>
             2. Choose <b>Neon</b> and click <b>Create</b>.<br>
             3. On the "Create Database" screen, press <b>Continue</b>.<br>
-            4. In the <b>Database Name (*)</b> field, paste this exact unique name:<br>
-            <span id="uniqueDbName" class="copy-box">Generating...</span><br>
-            5. Press <b>Create</b>, and on the next page, press <b>Done</b>.<br>
+            4. Name your DB: <b><span id="uniqueDbName" class="copy-box">Generating...</span></b><br>
+            5. Press <b>Create</b>, then press <b>Done</b>.<br>
             6. In the <b>Quickstart</b> tab, click <b>Show secret</b> and copy the <b>DATABASE_URL</b>.
         </div>
-        <label>Paste your <b>DATABASE_URL</b> here to unlock the next step:</label>
+        <label>Paste your <b>DATABASE_URL</b> here to unlock Next Step:</label>
         <input type="text" id="dbUrlInput" placeholder="postgres://..." oninput="validateDatabaseKey()">
+        <div id="validMsg" class="validation-msg" style="color: #059669;">Valid database URL detected ✓</div>
     </div>
 
     <div class="step" id="step4">
         <h2 id="h4">Deploy Lab</h2>
-        <p>Launch your deployment using the unique ID generated below.</p>
         <div class="info-box">
-            <b>Vercel Settings:</b><br>
             • Repository Name: <b><span id="uniqueRepoName">...</span></b><br>
             • Variable: <code>MEDUSA_ADMIN_ONBOARDING_TYPE</code> = <code>nextjs</code>.
         </div>
@@ -163,7 +155,7 @@
 
     <div class="step" id="step5">
         <h2 id="h5">Claude AI Analyst</h2>
-        <p>Paste this config into Claude Desktop. Your key has been automatically injected.</p>
+        <p>Your connection string has been automatically injected into the configuration below.</p>
         <div class="code-container">
             <code id="mcpConfig">"postgresql": {
   "command": "npx",
@@ -172,18 +164,8 @@
         </div>
     </div>
 
-    <div class="step" id="step6">
-        <h2 id="h6">Final Test</h2>
-        <div class="info-box">Ask Claude: "Connect to my database and list the product categories."</div>
-    </div>
-
-    <div class="step" id="step7">
-        <h2>Setup Complete</h2>
-        <p>Congratulations! Your AI Product Lab is ready.</p>
-        <div class="btn-container">
-            <button class="btn-action" onclick="location.reload()">Finish</button>
-        </div>
-    </div>
+    <div class="step" id="step6"><h2 id="h6">Final Test</h2><div class="info-box">Ask Claude to list product categories.</div></div>
+    <div class="step" id="step7"><h2>Setup Complete</h2><div class="btn-container"><button class="btn-action" onclick="location.reload()">Finish</button></div></div>
 
     <div class="nav-buttons" id="navBtns">
         <button class="nav-btn btn-back" id="prevBtn" onclick="changeStep(-1)">Back</button>
@@ -205,19 +187,24 @@
     function validateDatabaseKey() {
         const inputVal = document.getElementById('dbUrlInput').value.trim();
         const nextBtn = document.getElementById('nextBtn');
+        const msg = document.getElementById('validMsg');
         
-        // Next step is only available if string starts with postgres://
-        if (inputVal.startsWith('postgres://')) {
+        // Flexible validation for both postgres:// and postgresql://
+        const isValid = inputVal.startsWith('postgres://') || inputVal.startsWith('postgresql://');
+        
+        if (isValid) {
             nextBtn.disabled = false;
+            msg.style.display = 'block';
             
-            // Dynamic update of the config block
+            // Dynamic update of the config block for Step 5
             const configText = `"postgresql": {
   "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-postgres", "${inputVal}?sslmode=require"]
+  "args": ["-y", "@modelcontextprotocol/server-postgres", "${inputVal.includes('?') ? inputVal : inputVal + '?sslmode=require'}"]
 }`;
             document.getElementById('mcpConfig').innerText = configText;
         } else {
             nextBtn.disabled = true;
+            msg.style.display = 'none';
         }
     }
 
@@ -230,9 +217,7 @@
         const safeN = n.replace(/\s+/g, '-').toLowerCase();
         const safeC = c.replace(/\s+/g, '-').toLowerCase();
         
-        // Generating the unique ID
         finalProjectName = `pm-lab-${safeN}-${safeC}-${getTimestamp()}`;
-        
         document.getElementById('uniqueDbName').innerText = finalProjectName;
         document.getElementById('uniqueRepoName').innerText = finalProjectName;
         
@@ -252,9 +237,7 @@
     function changeStep(n) {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.progress-step').forEach(p => p.classList.remove('active'));
-        
         currentStep += n;
-        
         if (currentStep < 0) currentStep = 0;
         if (currentStep > 7) { location.reload(); return; }
         
@@ -265,12 +248,9 @@
         }
         
         const nextBtn = document.getElementById('nextBtn');
-        const prevBtn = document.getElementById('prevBtn');
-        
-        prevBtn.style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
+        document.getElementById('prevBtn').style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
         nextBtn.innerText = (currentStep === 7) ? 'Finish' : 'Next Step';
         
-        // Strict Gate: Database step requires validation
         if (currentStep === 3) {
             validateDatabaseKey();
         } else {
