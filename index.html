@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PM Lab Wizard</title>
+    <title>PM Expert | Lab Setup Wizard</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
         .wizard-container { background: white; width: 100%; max-width: 600px; padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
@@ -13,64 +13,78 @@
         
         .progress-bar { display: flex; justify-content: space-between; margin-bottom: 30px; position: relative; }
         .progress-bar::before { content: ""; background: #e5e7eb; height: 2px; width: 100%; position: absolute; top: 15px; left: 0; z-index: 0; }
-        .progress-step { width: 30px; height: 30px; background: #e5e7eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; z-index: 1; position: relative; transition: 0.3s; }
+        .progress-step { width: 30px; height: 30px; background: #e5e7eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; z-index: 1; position: relative; }
         .progress-step.active { background: #2563eb; color: white; }
         
-        h2 { color: #111827; margin-top: 0; font-size: 1.5rem; }
+        h1 { color: #111827; font-size: 1.8rem; margin: 0 0 10px 0; text-align: center; }
+        h2 { color: #111827; margin-top: 0; font-size: 1.4rem; }
         p { color: #4b5563; line-height: 1.6; }
         
-        .code-container { position: relative; background: #1e293b; border-radius: 8px; margin: 15px 0; border: 1px solid #334155; }
-        code { color: #f8fafc; padding: 20px; display: block; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.5; overflow-x: auto; white-space: pre; }
-        .copy-btn { position: absolute; top: 10px; right: 10px; background: #475569; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; transition: 0.2s; }
-        .copy-btn:hover { background: #64748b; }
-        .copy-btn.copied { background: #059669; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #374151; font-size: 14px; }
+        input[type="text"] { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; }
+        
+        .code-container { position: relative; background: #1e293b; border-radius: 8px; margin: 15px 0; }
+        code { color: #f8fafc; padding: 20px; display: block; font-family: monospace; font-size: 13px; white-space: pre; overflow-x: auto; }
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #475569; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
 
         .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; }
-        .btn { padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; text-decoration: none; display: inline-block; font-size: 15px; }
+        .btn { padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; text-decoration: none; display: inline-block; text-align: center; }
         .btn-next { background: #2563eb; color: white; }
         .btn-prev { background: #f3f4f6; color: #4b5563; }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn-external { background: #059669; color: white; width: 100%; text-align: center; box-sizing: border-box; margin-bottom: 10px; }
-        
-        small { color: #6b7280; display: block; margin-top: 10px; }
+        .btn-external { background: #059669; color: white; width: 100%; }
     </style>
 </head>
 <body>
 
 <div class="wizard-container">
-    <div class="progress-bar">
+    <h1>Course Instructor Lab Setup</h1>
+    <div class="progress-bar" id="progressBar" style="display:none;">
         <div class="progress-step active" id="p1">1</div>
         <div class="progress-step" id="p2">2</div>
         <div class="progress-step" id="p3">3</div>
         <div class="progress-step" id="p4">4</div>
     </div>
 
-    <div class="step active" id="step1">
-        <h2>🚀 Step 1: Deploy Infrastructure</h2>
-        <p>This will build your Web Store and Database. A new browser tab will open for the setup.</p>
-        <p><strong>Required Actions:</strong><br>
-           1. Sign in with Google/GitHub.<br>
-           2. When asked for Storage, click <b>"Connect Neon Postgres"</b>.</p>
-        <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default&env=MEDUSA_ADMIN_ONBOARDING_TYPE&project-name=my-product-lab&repository-name=my-product-lab" 
-           target="_blank" class="btn btn-external">Open Deployment Tab →</a>
-        <small>After you see "Congratulations" in the Vercel tab, return here and click Next.</small>
+    <div class="step active" id="step0">
+        <h2>Welcome! Let's build your lab.</h2>
+        <p>Please provide a few details to personalize your environment and keep your courses organized.</p>
+        
+        <label for="instructorName">Full Name</label>
+        <input type="text" id="instructorName" placeholder="e.g. Jane Smith">
+        
+        <label for="courseCohort">Course Cohort / Date</label>
+        <input type="text" id="courseCohort" placeholder="e.g. Sunday-Feb-2026">
+        
+        <button class="btn btn-next" style="width:100%" onclick="startWizard()">Start Setup</button>
+    </div>
+
+    <div class="step" id="step1">
+        <h2 id="greeting1">Step 1: Launch Your Store</h2>
+        <p>I've generated a unique deployment for you. This will create a private fashion store that belongs specifically to this course cohort.</p>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
+            <strong>Your Instructions:</strong><br>
+            1. Click the button below (opens Vercel).<br>
+            2. Log in with your Google account.<br>
+            3. <b>Important:</b> When prompted for Storage, select <b>"Connect Neon Postgres"</b>.
+        </div>
+        
+        <a id="deployLink" href="#" target="_blank" class="btn btn-external">🚀 Launch My Personal Lab →</a>
+        <p><small>Come back here after you see the "Congratulations" screen on Vercel.</small></p>
     </div>
 
     <div class="step" id="step2">
-        <h2>🔑 Step 2: Copy Connection URL</h2>
-        <p>Go back to the <b>Vercel tab</b> to find your database credentials:</p>
+        <h2 id="greeting2">Step 2: Get Your Data Key</h2>
+        <p>The store is live! Now, let's grab the connection key so the AI can analyze your data:</p>
         <ol>
-            <li>Navigate to the <b>Storage</b> tab in Vercel.</li>
+            <li>Go back to the Vercel tab and click <b>Storage</b>.</li>
             <li>Select your <b>Neon</b> database icon.</li>
-            <li>Copy the <b>Postgres Connection String</b> (starts with <code>postgres://</code>).</li>
+            <li>Copy the <b>Postgres Connection String</b> (the long link starting with <code>postgres://</code>).</li>
         </ol>
-        <p><small>Keep this URL ready for the next step.</small></p>
     </div>
 
     <div class="step" id="step3">
-        <h2>🤖 Step 3: Setup Claude AI</h2>
-        <p>Open <b>Claude Desktop</b> > Settings > MCP > Edit Config. Copy the block below and paste it inside <code>"mcpServers"</code>:</p>
-        
+        <h2 id="greeting3">Step 3: Connect the Analyst</h2>
+        <p>Open the <b>Claude Desktop</b> app. Go to Settings > MCP > Edit Config. Paste this code block:</p>
         <div class="code-container">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <code id="mcpCode">"postgresql": {
@@ -82,56 +96,74 @@
   ]
 }</code>
         </div>
-        <p style="color: #b91c1c; font-size: 14px; font-weight: bold;">
-            ⚠️ Don't forget to replace 'PASTE_URL_HERE' with your URL, keeping the suffix!
-        </p>
+        <p style="color: #b91c1c; font-size: 13px;"><b>Remember:</b> Replace 'PASTE_URL_HERE' with your unique key.</p>
     </div>
 
     <div class="step" id="step4">
-        <h2>✅ Step 4: Final Verification</h2>
-        <p>Your AI Analyst is now connected to your store! Open Claude and ask:</p>
-        <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 15px; border-radius: 8px; font-style: italic;">
-            "Access my database and list the top 3 product categories by the number of products they contain."
-        </div>
-        <p><small>If it works, your lab is fully operational. Restart Claude if you see any connection errors.</small></p>
+        <h2 id="greeting4">Step 4: Lab is Operational</h2>
+        <p>Everything is connected. You can now demonstrate live data analysis to your students.</p>
+        <p>Try asking Claude: <i>"Show me a list of all current products and their prices."</i></p>
     </div>
 
-    <div class="nav-buttons">
+    <div class="nav-buttons" id="navBtns" style="display:none;">
         <button class="btn btn-prev" id="prevBtn" onclick="changeStep(-1)" disabled>Back</button>
         <button class="btn btn-next" id="nextBtn" onclick="changeStep(1)">Next</button>
     </div>
 </div>
 
 <script>
-    let currentStep = 1;
+    let currentStep = 0;
+
+    function startWizard() {
+        const fullName = document.getElementById('instructorName').value.trim();
+        const cohort = document.getElementById('courseCohort').value.trim();
+        
+        if (!fullName || !cohort) { 
+            alert("Please fill in both your name and cohort to continue."); 
+            return; 
+        }
+        
+        const firstName = fullName.split(' ')[0];
+        const safeName = fullName.replace(/\s+/g, '-').toLowerCase();
+        const safeCohort = cohort.replace(/\s+/g, '-').toLowerCase();
+        
+        // Final Project Name Construction
+        const projectName = `pm-lab-${safeName}-${safeCohort}`;
+        
+        // Update Deploy Link
+        const baseUrl = "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default&env=MEDUSA_ADMIN_ONBOARDING_TYPE";
+        document.getElementById('deployLink').href = `${baseUrl}&project-name=${projectName}&repository-name=${projectName}`;
+        
+        // Personalize greetings
+        document.getElementById('greeting1').innerText = `Step 1: Launch ${firstName}'s Store`;
+        document.getElementById('greeting2').innerText = `Step 2: Access Your Data, ${firstName}`;
+        document.getElementById('greeting3').innerText = `${firstName}, Setup Claude`;
+        document.getElementById('greeting4').innerText = `Success, ${firstName}!`;
+
+        // Switch to Step 1
+        document.getElementById('step0').classList.remove('active');
+        document.getElementById('step1').classList.add('active');
+        document.getElementById('progressBar').style.display = 'flex';
+        document.getElementById('navBtns').style.display = 'flex';
+        currentStep = 1;
+    }
 
     function changeStep(n) {
         document.getElementById(`step${currentStep}`).classList.remove('active');
         document.getElementById(`p${currentStep}`).classList.remove('active');
-        
         currentStep += n;
-        
         document.getElementById(`step${currentStep}`).classList.add('active');
         document.getElementById(`p${currentStep}`).classList.add('active');
-        
         document.getElementById('prevBtn').disabled = (currentStep === 1);
         document.getElementById('nextBtn').innerText = (currentStep === 4) ? 'Finish' : 'Next';
-        
-        if (currentStep > 4) {
-            alert("Lab Setup Complete!");
-            location.reload();
-        }
+        if (currentStep > 4) location.reload();
     }
 
     function copyCode(btn) {
         const code = document.getElementById('mcpCode').innerText;
         navigator.clipboard.writeText(code).then(() => {
             btn.innerText = "Copied!";
-            btn.classList.add('copied');
-            setTimeout(() => {
-                btn.innerText = "Copy";
-                btn.classList.remove('copied');
-            }, 2000);
+            setTimeout(() => btn.innerText = "Copy", 2000);
         });
     }
 </script>
