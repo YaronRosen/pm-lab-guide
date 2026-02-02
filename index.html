@@ -34,6 +34,8 @@
         .btn-external { background: #059669; color: white; width: 100%; }
         
         .troubleshooting { margin-top: 20px; font-size: 12px; color: #6b7280; border-top: 1px solid #e5e7eb; padding-top: 15px; }
+        a { color: #2563eb; text-decoration: none; font-weight: bold; }
+        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -49,7 +51,7 @@
 
     <div class="step active" id="step0">
         <h2>Welcome! Let's build your lab.</h2>
-        <p>Please provide a few details to personalize your environment and keep your courses organized.</p>
+        <p>Provide a few details to personalize your environment and keep your courses organized.</p>
         
         <label for="instructorName">Full Name</label>
         <input type="text" id="instructorName" placeholder="e.g. Jane Smith">
@@ -65,22 +67,26 @@
         <p>This will deploy your functional <b>E-commerce Store</b>. This store is your "Product" for the lab.</p>
         <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
             <strong>Instructions:</strong><br>
-            1. Click the button below.<br>
-            2. Log in with Google.<br>
-            3. <b>Crucial:</b> When prompted for Storage, click <b>"Connect Neon Postgres"</b>.
+            1. Click the button below (opens Vercel).<br>
+            2. Log in with Google/GitHub.<br>
+            3. <b>Important:</b> When prompted for Storage, click <b>"Connect Neon Postgres"</b>.
         </div>
         <a id="deployLink" href="#" target="_blank" class="btn btn-external">🚀 Launch My Store Setup →</a>
         <p><small>Return here after you see the "Congratulations" screen on Vercel.</small></p>
     </div>
 
     <div class="step" id="step2">
-        <h2 id="greeting2">Step 2: Get Your Data Key</h2>
-        <p>Now, let's grab the "key" so the AI can analyze your store's data:</p>
+        <h2 id="greeting2">Step 2: Access Your Data</h2>
+        <p>If the Vercel setup tab closed, don't worry. Follow these steps to find your data key:</p>
         <ol>
-            <li>Go back to the Vercel tab and click <b>Storage</b> at the top.</li>
-            <li>Select your <b>Neon</b> database icon.</li>
-            <li>Copy the <b>Postgres Connection String</b> (starts with <code>postgres://</code>).</li>
+            <li>Go to your <b><a href="https://vercel.com/dashboard" target="_blank">Vercel Dashboard</a></b>.</li>
+            <li>Click on your new project (e.g. <code>pm-lab-...</code>).</li>
+            <li>Click the <b>Storage</b> tab in the top navigation menu.</li>
         </ol>
+        
+        
+        
+        <p>Once inside Storage, select <b>Neon</b> and copy the <b>"Postgres Connection String"</b> (starts with <code>postgres://</code>).</p>
     </div>
 
     <div class="step" id="step3">
@@ -133,7 +139,6 @@
         const safeCohort = cohort.replace(/\s+/g, '-').toLowerCase();
         const projectName = `pm-lab-${safeName}-${safeCohort}`;
         
-        // Finalized Link with pre-filled Environment Variable
         const baseUrl = "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default";
         const envParams = "env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs";
         
