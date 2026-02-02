@@ -100,14 +100,15 @@
                 <li>Click <b>Show secret</b> (eye icon) and copy the <b>DATABASE_URL</b>.</li>
             </ul>
         </div>
-        <label>Paste the DATABASE_URL here:</label>
+        
+        <label>Paste the DATABASE_URL here to unlock Next Step:</label>
         <input type="text" id="dbUrlInput" placeholder="postgresql://..." oninput="validateKey()">
         <div id="validBadge" class="badge">URL Validated ✓</div>
     </div>
 
     <div class="step" id="step4">
         <h2 id="h4">Step 4: Deploy Store</h2>
-        <p>We've pre-configured the settings to ensure a successful Next.js build.</p>
+        <p>Launch your deployment. Settings are pre-configured to ensure a successful build.</p>
         <div class="info-box">
             <b>Verification on Vercel:</b><br>
             <ul style="margin: 10px 0; padding-left: 20px;">
@@ -144,11 +145,11 @@
         const hh = String(now.getHours()).padStart(2, '0');
         const mm = String(now.getMinutes()).padStart(2, '0');
         const ss = String(now.getSeconds()).padStart(2, '0');
-        return hh + mm + ss; // FIXED: Returns HHMMSS format
+        return hh + mm + ss; // FIXED: Accurate HHMMSS format
     }
 
     function validateKey() {
-        const input = document.getElementById('dbUrlInput').value.trim(); // CLEAN SPACES
+        const input = document.getElementById('dbUrlInput').value.trim();
         const nextBtn = document.getElementById('nextBtn');
         const badge = document.getElementById('validBadge');
         const isVal = input.toLowerCase().includes('postgres://') || input.toLowerCase().includes('postgresql://');
@@ -168,11 +169,10 @@
         const c = document.getElementById('courseCohort').value.trim();
         if (!n || !c) return alert("Please fill in your details.");
         
-        // UNIQUE ID WITH CORRECT TIME
+        // UNIQUE ID WITH ACCURATE TIME
         finalProjectName = `pm-lab-${n.replace(/\s+/g, '-').toLowerCase()}-${c.replace(/\s+/g, '-').toLowerCase()}-${getTimestamp()}`;
         
         document.getElementById('uniqueDbName').innerText = finalProjectName;
-        // INJECT FRAMEWORK TO PREVENT BUILD ERRORS
         document.getElementById('deployLink').href = `https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default&env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs&project-name=${finalProjectName}&repository-name=${finalProjectName}&framework=nextjs`;
         
         const firstName = n.split(' ')[0];
