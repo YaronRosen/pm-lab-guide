@@ -3,73 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PM Lab Generator 2026</title>
+    <title>PM Lab Wizard</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 40px auto; padding: 20px; background-color: #f9fafb; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; margin-bottom: 20px; }
-        h1 { color: #111827; font-size: 2.5rem; margin-bottom: 10px; }
-        .subtitle { color: #6b7280; font-size: 1.1rem; margin-bottom: 30px; }
-        .step-number { background: #2563eb; color: white; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; margin-right: 10px; }
-        .btn { display: inline-block; background: #2563eb; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 15px; transition: background 0.2s; }
-        .btn:hover { background: #1d4ed8; }
-        code { background: #1e293b; color: #f8fafc; padding: 20px; display: block; border-radius: 8px; font-family: 'Courier New', monospace; overflow-x: auto; margin-top: 15px; position: relative; }
-        .copy-hint { font-size: 0.85rem; color: #6b7280; margin-top: 10px; font-weight: bold; }
-        .alert { background: #fff7ed; border-left: 4px solid #f97316; padding: 15px; margin-top: 20px; font-size: 0.95rem; border-radius: 4px; }
-        .troubleshooting { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; }
-        .troubleshooting h3 { color: #b91c1c; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .wizard-container { background: white; width: 100%; max-width: 600px; padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .progress-bar { display: flex; justify-content: space-between; margin-bottom: 30px; position: relative; }
+        .progress-bar::before { content: ""; background: #e5e7eb; height: 2px; width: 100%; position: absolute; top: 15px; left: 0; z-index: 0; }
+        .progress-step { width: 30px; height: 30px; background: #e5e7eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; z-index: 1; position: relative; transition: 0.3s; }
+        .progress-step.active { background: #2563eb; color: white; }
+        
+        h2 { color: #111827; margin-top: 0; font-size: 1.5rem; }
+        p { color: #4b5563; line-height: 1.6; }
+        
+        .code-container { position: relative; background: #1e293b; border-radius: 8px; margin: 15px 0; border: 1px solid #334155; }
+        code { color: #f8fafc; padding: 20px; display: block; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.5; overflow-x: auto; white-space: pre; }
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #475569; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; transition: 0.2s; }
+        .copy-btn:hover { background: #64748b; }
+        .copy-btn.copied { background: #059669; }
+
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; }
+        .btn { padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; text-decoration: none; display: inline-block; font-size: 15px; }
+        .btn-next { background: #2563eb; color: white; }
+        .btn-prev { background: #f3f4f6; color: #4b5563; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-external { background: #059669; color: white; width: 100%; text-align: center; box-sizing: border-box; margin-bottom: 10px; }
+        
+        small { color: #6b7280; display: block; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <h1>PM Lab Generator</h1>
-    <p class="subtitle">Deploy your personal e-commerce lab and connect it to Claude AI in 3 simple steps.</p>
-
-    <div class="card">
-        <h2><span class="step-number">1</span> Deploy Infrastructure</h2>
-        <p>This creates your live store and database. Sign in with <strong>Google</strong>.</p>
-        <p><em>Note: When prompted for Storage, click <strong>"Connect Neon Postgres"</strong>.</em></p>
-        <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default&env=MEDUSA_ADMIN_ONBOARDING_TYPE&project-name=my-product-lab&repository-name=my-product-lab" class="btn" target="_blank">🚀 Deploy My Lab</a>
+<div class="wizard-container">
+    <div class="progress-bar">
+        <div class="progress-step active" id="p1">1</div>
+        <div class="progress-step" id="p2">2</div>
+        <div class="progress-step" id="p3">3</div>
+        <div class="progress-step" id="p4">4</div>
     </div>
 
-    <div class="card">
-        <h2><span class="step-number">2</span> Get the Connection URL</h2>
-        <p>After deployment is finished:</p>
+    <div class="step active" id="step1">
+        <h2>🚀 Step 1: Deploy Infrastructure</h2>
+        <p>This will build your Web Store and Database. A new browser tab will open for the setup.</p>
+        <p><strong>Required Actions:</strong><br>
+           1. Sign in with Google/GitHub.<br>
+           2. When asked for Storage, click <b>"Connect Neon Postgres"</b>.</p>
+        <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default&env=MEDUSA_ADMIN_ONBOARDING_TYPE&project-name=my-product-lab&repository-name=my-product-lab" 
+           target="_blank" class="btn btn-external">Open Deployment Tab →</a>
+        <small>After you see "Congratulations" in the Vercel tab, return here and click Next.</small>
+    </div>
+
+    <div class="step" id="step2">
+        <h2>🔑 Step 2: Copy Connection URL</h2>
+        <p>Go back to the <b>Vercel tab</b> to find your database credentials:</p>
         <ol>
-            <li>Go to the <strong>Storage</strong> tab in Vercel.</li>
-            <li>Click on your <strong>Neon</strong> database.</li>
-            <li>Copy the <strong>"Postgres Connection String"</strong> (it starts with <code>postgres://</code>).</li>
+            <li>Navigate to the <b>Storage</b> tab in Vercel.</li>
+            <li>Select your <b>Neon</b> database icon.</li>
+            <li>Copy the <b>Postgres Connection String</b> (starts with <code>postgres://</code>).</li>
         </ol>
+        <p><small>Keep this URL ready for the next step.</small></p>
     </div>
 
-    <div class="card">
-        <h2><span class="step-number">3</span> Setup Claude Analyst</h2>
-        <p>Open <strong>Claude Desktop</strong> > Settings > MCP > Edit Config. Paste this code inside <code>"mcpServers"</code>:</p>
-        <code>
-"postgresql": {<br>
-&nbsp;&nbsp;"command": "npx",<br>
-&nbsp;&nbsp;"args": [<br>
-&nbsp;&nbsp;&nbsp;&nbsp;"-y",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;"@modelcontextprotocol/server-postgres",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;"YOUR_POSTGRES_URL_HERE?sslmode=require"<br>
-&nbsp;&nbsp;]<br>
-}
-        </code>
-        <p class="copy-hint">⚠️ Replace the text above with your URL. Keep the <code>?sslmode=require</code> at the end!</p>
+    <div class="step" id="step3">
+        <h2>🤖 Step 3: Setup Claude AI</h2>
+        <p>Open <b>Claude Desktop</b> > Settings > MCP > Edit Config. Copy the block below and paste it inside <code>"mcpServers"</code>:</p>
+        
+        <div class="code-container">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <code id="mcpCode">"postgresql": {
+  "command": "npx",
+  "args": [
+    "-y",
+    "@modelcontextprotocol/server-postgres",
+    "PASTE_URL_HERE?sslmode=require"
+  ]
+}</code>
+        </div>
+        <p style="color: #b91c1c; font-size: 14px; font-weight: bold;">
+            ⚠️ Don't forget to replace 'PASTE_URL_HERE' with your URL, keeping the suffix!
+        </p>
     </div>
 
-    <div class="alert">
-        <strong>Final Test:</strong> Open a new chat in Claude and ask: <br>
-        <em>"List all product categories in my database and count how many products are in each."</em>
+    <div class="step" id="step4">
+        <h2>✅ Step 4: Final Verification</h2>
+        <p>Your AI Analyst is now connected to your store! Open Claude and ask:</p>
+        <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 15px; border-radius: 8px; font-style: italic;">
+            "Access my database and list the top 3 product categories by the number of products they contain."
+        </div>
+        <p><small>If it works, your lab is fully operational. Restart Claude if you see any connection errors.</small></p>
     </div>
 
-    <div class="troubleshooting">
-        <h3>Having trouble?</h3>
-        <ul>
-            <li><strong>Claude won't connect?</strong> Make sure you restarted the Claude app completely after saving the config file.</li>
-            <li><strong>Database Error?</strong> Double-check that you added <code>?sslmode=require</code> at the very end of your connection string.</li>
-            <li><strong>Vercel stuck?</strong> Ensure you have a Neon account linked; sometimes a quick refresh of the Vercel page helps.</li>
-        </ul>
+    <div class="nav-buttons">
+        <button class="btn btn-prev" id="prevBtn" onclick="changeStep(-1)" disabled>Back</button>
+        <button class="btn btn-next" id="nextBtn" onclick="changeStep(1)">Next</button>
     </div>
+</div>
+
+<script>
+    let currentStep = 1;
+
+    function changeStep(n) {
+        document.getElementById(`step${currentStep}`).classList.remove('active');
+        document.getElementById(`p${currentStep}`).classList.remove('active');
+        
+        currentStep += n;
+        
+        document.getElementById(`step${currentStep}`).classList.add('active');
+        document.getElementById(`p${currentStep}`).classList.add('active');
+        
+        document.getElementById('prevBtn').disabled = (currentStep === 1);
+        document.getElementById('nextBtn').innerText = (currentStep === 4) ? 'Finish' : 'Next';
+        
+        if (currentStep > 4) {
+            alert("Lab Setup Complete!");
+            location.reload();
+        }
+    }
+
+    function copyCode(btn) {
+        const code = document.getElementById('mcpCode').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            btn.innerText = "Copied!";
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.innerText = "Copy";
+                btn.classList.remove('copied');
+            }, 2000);
+        });
+    }
+</script>
 
 </body>
 </html>
