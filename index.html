@@ -11,35 +11,26 @@
             --bg-gray: #f3f4f6;
             --border-color: #d1d5db;
         }
-
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-gray); display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; color: var(--text-dark); }
         .wizard-container { background: white; width: 100%; max-width: 580px; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        
         h1 { font-size: 1.5rem; font-weight: 800; text-align: center; margin-bottom: 30px; }
         h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; border-bottom: 2px solid var(--bg-gray); padding-bottom: 10px; }
         p { font-size: 1rem; line-height: 1.6; margin-bottom: 20px; }
-        
         .step { display: none; }
         .step.active { display: block; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .progress-bar { display: none; justify-content: space-between; margin-bottom: 40px; position: relative; }
         .progress-bar::before { content: ""; background: var(--border-color); height: 2px; width: 100%; position: absolute; top: 15px; left: 0; z-index: 0; }
         .progress-step { width: 32px; height: 32px; background: white; border: 2px solid var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; z-index: 1; color: #6b7280; }
         .progress-step.active { background: var(--primary-blue); border-color: var(--primary-blue); color: white; }
-
         label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.9rem; }
-        input[type="text"] { width: 100%; padding: 14px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 1rem; margin-bottom: 20px; box-sizing: border-box; background: #ffffff; }
-        
+        input[type="text"] { width: 100%; padding: 14px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 1rem; margin-bottom: 20px; box-sizing: border-box; }
         .info-box { background: #f0f7ff; border-left: 5px solid var(--primary-blue); padding: 20px; margin: 20px 0; border-radius: 8px; }
-        .copy-box { background: #f8fafc; padding: 12px; border-radius: 8px; font-family: monospace; margin: 10px 0; display: block; text-align: center; border: 2px dashed var(--primary-blue); color: var(--primary-blue); font-weight: 800; font-size: 1rem; }
-        
+        .copy-box { background: #f8fafc; padding: 12px; border-radius: 8px; font-family: monospace; margin: 10px 0; display: block; text-align: center; border: 2px dashed var(--primary-blue); color: var(--primary-blue); font-weight: 800; }
         .code-container { background: #111827; border-radius: 12px; padding: 20px; margin: 15px 0; }
         code { color: #f3f4f6; font-family: monospace; font-size: 0.85rem; line-height: 1.5; white-space: pre; display: block; overflow-x: auto; }
-
         .btn-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 20px; }
         .btn-action { background: var(--primary-blue); color: white; width: 100%; max-width: 380px; height: 52px; border-radius: 10px; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1rem; }
-        
         .nav-buttons { display: none; justify-content: space-between; margin-top: 40px; gap: 20px; }
         .nav-btn { height: 50px; padding: 0 30px; border-radius: 10px; font-weight: 700; cursor: pointer; border: none; min-width: 130px; font-size: 1rem; }
         .btn-next { background: var(--primary-blue); color: white; flex-grow: 1; }
@@ -57,7 +48,7 @@
 
     <div class="step active" id="step0">
         <h2>Welcome</h2>
-        <p>This wizard will set up your professional AI-powered Product Lab.</p>
+        <p>This setup creates a live AI-powered lab for product management analysis.</p>
         <label>Full Name</label><input type="text" id="instructorName" placeholder="e.g. Yaron Rosen">
         <label>Course Cohort ID</label><input type="text" id="courseCohort" placeholder="e.g. 05-11-2025">
         <div class="btn-container"><button class="btn-action" onclick="initWizard()">Initialize Lab</button></div>
@@ -85,17 +76,15 @@
 
     <div class="step" id="step4">
         <h2>Step 4: Deploy Store</h2>
-        <p>This deployment is pre-configured to handle the Medusa/Next.js build process.</p>
+        <p>We are using the official Medusa template to ensure the build environment is correctly detected by Vercel.</p>
         <div class="info-box">
-            <b>On the Vercel screen:</b><br>
+            <b>Final Steps on Vercel:</b><br>
             <ul style="margin: 10px 0; padding-left: 20px;">
-                <li>The variable name <b>MEDUSA_ADMIN_ONBOARDING_TYPE</b> is already set.</li>
-                <li>In the <b>Value</b> field, simply type: <b>nextjs</b></li>
+                <li>In the <b>Value</b> field for <b>MEDUSA_ADMIN_ONBOARDING_TYPE</b>, type: <b>nextjs</b>.</li>
                 <li>Click the black <b>Deploy</b> button.</li>
             </ul>
         </div>
-        
-        <div class="btn-container"><a id="deployLink" href="#" target="_blank" class="btn-action">🚀 Launch Secure Deployment</a></div>
+        <div class="btn-container"><a id="deployLink" href="#" target="_blank" class="btn-action">🚀 Launch Verified Deployment</a></div>
     </div>
 
     <div class="step" id="step5">
@@ -103,7 +92,7 @@
         <div class="code-container"><code id="mcpConfig">"postgresql": { ... }</code></div>
     </div>
 
-    <div class="step" id="step6"><h2>Step 6: Verify</h2><p>Ask Claude: "List my product categories."</p></div>
+    <div class="step" id="step6"><h2>Step 6: Verify</h2><p>Ask Claude: "List my product categories".</p></div>
     <div class="step" id="step7"><h2>Complete</h2><p>The lab is ready.</p><div class="btn-container"><button class="btn-action" onclick="location.reload()">Finish</button></div></div>
 
     <div class="nav-buttons" id="navBtns">
@@ -125,15 +114,12 @@
         const input = document.getElementById('dbUrlInput').value.trim();
         const nextBtn = document.getElementById('nextBtn');
         const badge = document.getElementById('validBadge');
-        const isVal = input.toLowerCase().includes('postgres://') || input.toLowerCase().includes('postgresql://');
-        
-        if (isVal && input.length > 20) {
+        if ((input.toLowerCase().includes('postgres://') || input.toLowerCase().includes('postgresql://')) && input.length > 20) {
             nextBtn.disabled = false;
             badge.style.display = 'block';
             document.getElementById('mcpConfig').innerText = `"postgresql": {\n  "command": "npx",\n  "args": ["-y", "@modelcontextprotocol/server-postgres", "${input}"]\n}`;
         } else {
-            nextBtn.disabled = true;
-            badge.style.display = 'none';
+            nextBtn.disabled = true; badge.style.display = 'none';
         }
     }
 
@@ -141,16 +127,12 @@
         const n = document.getElementById('instructorName').value.trim();
         const c = document.getElementById('courseCohort').value.trim();
         if (!n || !c) return alert("Fill in details.");
-        
         finalProjectName = `pm-lab-${n.replace(/\s+/g, '-').toLowerCase()}-${c.replace(/\s+/g, '-').toLowerCase()}-${getTimestamp()}`;
         document.getElementById('uniqueDbName').innerText = finalProjectName;
         
-        // FIXED URL: Forcing framework, build command and output directory to prevent "dist" error
-        const repo = "https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default";
-        const settings = "&framework=nextjs&build-command=npm%20run%20build&output-directory=.next";
-        const env = "&env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs";
-        
-        document.getElementById('deployLink').href = `https://vercel.com/new/clone?repository-url=${repo}${settings}${env}&project-name=${finalProjectName}&repository-name=${finalProjectName}`;
+        // SWITCHED TO OFFICIAL VERCEL TEMPLATE FOR MEDUSA TO FORCE CORRECT BUILD ENVIRONMENT
+        const repo = "https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-medusa";
+        document.getElementById('deployLink').href = `https://vercel.com/new/clone?repository-url=${repo}&env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs&project-name=${finalProjectName}&repository-name=${finalProjectName}`;
         
         const firstName = n.split(' ')[0];
         document.getElementById('mainTitle').innerText += `, ${firstName}`;
