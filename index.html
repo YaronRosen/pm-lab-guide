@@ -103,7 +103,7 @@
 
     <div class="step active" id="step0">
         <h2>Initial Information</h2>
-        <p>This wizard will generate a unique lab environment. Please provide your details to begin.</p>
+        <p>Enter your details. A unique ID with the current time will be generated for your lab infrastructure.</p>
         <label>Full Name</label>
         <input type="text" id="instructorName" placeholder="e.g. Yaron Rosen">
         <label>Course Cohort Date</label>
@@ -134,24 +134,24 @@
         <p>We will now provision a <b>Neon Postgres</b> database for your store.</p>
         <div class="info-box">
             <b>Action Required:</b><br>
-            1. Go to your Vercel Dashboard, click <b>Add New...</b> and select <b>Storage</b>.<br>
+            1. Go to Vercel Dashboard > <b>Add New...</b> > <b>Storage</b>.<br>
             2. Choose <b>Neon</b> and click <b>Create</b>.<br>
             3. On the "Create Database" screen, press <b>Continue</b>.<br>
-            4. In the <b>Database Name (*)</b> field, paste this exact name:<br>
+            4. In the <b>Database Name (*)</b> field, paste this exact unique name:<br>
             <span id="uniqueDbName" class="copy-box">Generating...</span><br>
             5. Press <b>Create</b>, and on the next page, press <b>Done</b>.<br>
-            6. In the <b>Quickstart</b> tab, find <b>DATABASE_URL</b>, click <b>Show secret</b> (eye icon), and copy the full string.
+            6. In the <b>Quickstart</b> tab, click <b>Show secret</b> and copy the <b>DATABASE_URL</b>.
         </div>
         
     </div>
 
     <div class="step" id="step4">
         <h2 id="h4">Deploy Lab</h2>
-        <p>Launch your deployment. Your project name will match your database name exactly.</p>
+        <p>Launch your deployment. The project name matches your database exactly.</p>
         <div class="info-box">
-            <b>Important Variable:</b><br>
-            Set <code>MEDUSA_ADMIN_ONBOARDING_TYPE</code> to <code>nextjs</code>.<br>
-            Then click the <b>Deploy</b> button.
+            <b>Vercel Settings:</b><br>
+            • Repository Name: <b><span id="uniqueRepoName">...</span></b><br>
+            • Variable: <code>MEDUSA_ADMIN_ONBOARDING_TYPE</code> = <code>nextjs</code>.
         </div>
         <div class="btn-container">
             <a id="deployLink" href="#" target="_blank" class="btn-action">🚀 Launch Store Deployment</a>
@@ -160,24 +160,23 @@
 
     <div class="step" id="step5">
         <h2 id="h5">Claude AI Analyst</h2>
-        <p>Paste this config into Claude Desktop (Settings > MCP > Edit Config) to link the AI.</p>
+        <p>Paste this config into Claude Desktop to link the AI to your unique database.</p>
         <div class="code-container">
             <code>"postgresql": {
   "command": "npx",
   "args": ["-y", "@modelcontextprotocol/server-postgres", "PASTE_URL_HERE?sslmode=require"]
 }</code>
         </div>
-        <p><small>Replace <code>PASTE_URL_HERE</code> with the string from Step 3.</small></p>
     </div>
 
     <div class="step" id="step6">
         <h2 id="h6">Final Test</h2>
-        <div class="info-box">Ask Claude: "Connect to my database and list the top 3 categories."</div>
+        <div class="info-box">Ask Claude: "Connect to my database and list the product categories."</div>
     </div>
 
     <div class="step" id="step7">
         <h2>Setup Complete</h2>
-        <p>Congratulations! Your AI Product Lab is ready.</p>
+        <p>Congratulations! Your unique AI Product Lab is ready.</p>
         <div class="btn-container">
             <button class="btn-action" onclick="location.reload()">Finish</button>
         </div>
@@ -191,14 +190,13 @@
 
 <script>
     let currentStep = 0;
-    let instructorName = "";
+    let finalProjectName = "";
 
     function getTimestamp() {
         const now = new Date();
-        const hh = String(now.getHours()).padStart(2, '0');
-        const mm = String(now.getMinutes()).padStart(2, '0');
-        const ss = String(now.getSeconds()).padStart(2, '0');
-        return `${hh}${mm}${ss}`;
+        return String(now.getHours()).padStart(2, '0') + 
+               String(now.getMinutes()).padStart(2, '0') + 
+               String(now.getSeconds()).padStart(2, '0');
     }
 
     function initWizard() {
@@ -206,22 +204,24 @@
         const c = document.getElementById('courseCohort').value.trim();
         if (!n || !c) { alert("Please complete both fields."); return; }
         
-        instructorName = n.split(' ')[0];
+        const instructorFirstName = n.split(' ')[0];
         const safeN = n.replace(/\s+/g, '-').toLowerCase();
         const safeC = c.replace(/\s+/g, '-').toLowerCase();
         
-        const timestamp = getTimestamp();
-        const projectName = `pm-lab-${safeN}-${safeC}-${timestamp}`;
+        // Locked Unique Name for the entire session
+        finalProjectName = `pm-lab-${safeN}-${safeC}-${getTimestamp()}`;
         
-        document.getElementById('uniqueDbName').innerText = projectName;
+        // Update all UI elements with the locked name
+        document.getElementById('uniqueDbName').innerText = finalProjectName;
+        document.getElementById('uniqueRepoName').innerText = finalProjectName;
         
         const baseUrl = "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default";
         const envParams = "env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs";
-        document.getElementById('deployLink').href = `${baseUrl}&${envParams}&project-name=${projectName}&repository-name=${projectName}`;
+        document.getElementById('deployLink').href = `${baseUrl}&${envParams}&project-name=${finalProjectName}&repository-name=${finalProjectName}`;
         
         for(let i=1; i<=6; i++) {
             const el = document.getElementById('h'+i);
-            if(el) el.innerText += `, ${instructorName}`;
+            if(el) el.innerText += `, ${instructorFirstName}`;
         }
         document.getElementById('progressBar').style.display = 'flex';
         document.getElementById('navBtns').style.display = 'flex';
