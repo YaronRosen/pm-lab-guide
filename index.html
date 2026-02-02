@@ -24,8 +24,6 @@
         input[type="text"] { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; }
         
         .system-desc { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin: 20px 0; }
-        .system-logo { font-size: 24px; margin-bottom: 10px; display: block; }
-        
         .code-container { position: relative; background: #1e293b; border-radius: 8px; margin: 15px 0; }
         code { color: #f8fafc; padding: 20px; display: block; font-family: monospace; font-size: 12px; white-space: pre; overflow-x: auto; }
         .copy-btn { position: absolute; top: 10px; right: 10px; background: #475569; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
@@ -46,7 +44,7 @@
     <h1>PM Instructor Lab Setup</h1>
     
     <div class="progress-bar" id="progressBar">
-        <div class="progress-step active" id="p1">1</div>
+        <div class="progress-step" id="p1">1</div>
         <div class="progress-step" id="p2">2</div>
         <div class="progress-step" id="p3">3</div>
         <div class="progress-step" id="p4">4</div>
@@ -59,62 +57,48 @@
     <div class="step active" id="step0">
         <h2>Welcome! Let's build your lab.</h2>
         <p>This wizard will guide you through setting up a live product environment for your students.</p>
-        
-        <label for="instructorName">Full Name</label>
+        <label>Full Name</label>
         <input type="text" id="instructorName" placeholder="e.g. Yaron Rosen">
-        
-        <label for="courseCohort">Course Cohort (Name/Date)</label>
-        <input type="text" id="courseCohort" placeholder="e.g. Spring-2026">
-        
+        <label>Course Cohort</label>
+        <input type="text" id="courseCohort" placeholder="e.g. Feb-2026">
         <button class="btn btn-next" style="width:100%" onclick="initWizard()">Start My Setup</button>
     </div>
 
     <div class="step" id="step1">
         <h2 id="greetVercel">Vercel Connection</h2>
-        <div class="system-desc">
-            <span class="system-logo">☁️</span>
-            <p><b>What is Vercel?</b> It hosts your lab's servers and database, making your store live on the web.</p>
-        </div>
-        <p>Please log in or create a Vercel account.</p>
-        <a href="https://vercel.com/login" target="_blank" class="btn btn-outline" onclick="markVerified(this)">Login to Vercel</a>
+        <div class="system-desc">☁️ <b>Vercel:</b> Hosts your website and database.</div>
+        <p>Log in or create a Vercel account.</p>
+        <a href="https://vercel.com/login" target="_blank" class="btn btn-outline" onclick="this.innerText='Verified ✓'">Login to Vercel</a>
     </div>
 
     <div class="step" id="step2">
         <h2 id="greetGithub">GitHub Connection</h2>
-        <div class="system-desc">
-            <span class="system-logo">🐙</span>
-            <p><b>What is GitHub?</b> It stores your lab's code. Vercel pulls the code from here to build your store.</p>
-        </div>
-        <p>Please ensure you are logged into GitHub.</p>
-        <a href="https://github.com/login" target="_blank" class="btn btn-outline" onclick="markVerified(this)">Login to GitHub</a>
+        <div class="system-desc">🐙 <b>GitHub:</b> Stores your code vault.</div>
+        <p>Ensure you are logged into GitHub.</p>
+        <a href="https://github.com/login" target="_blank" class="btn btn-outline" onclick="this.innerText='Verified ✓'">Login to GitHub</a>
     </div>
 
     <div class="step" id="step3">
         <h2 id="greetClaude">Prepare Claude Desktop</h2>
-        <div class="system-desc">
-            <span class="system-logo">🤖</span>
-            <p><b>Note:</b> You must use the <b>Claude Desktop App</b> for the lab to work properly (not the website).</p>
-        </div>
-        <p>Make sure Claude is installed and you are logged in.</p>
+        <div class="system-desc">🤖 <b>Claude:</b> Use the <b>Desktop App</b> for the lab.</div>
         <a href="https://claude.ai/download" target="_blank" class="btn btn-outline">Download Claude Desktop</a>
     </div>
 
     <div class="step" id="step4">
         <h2 id="greetLaunch">Launch Your Store</h2>
-        <p>Ready! Let's deploy your personal e-commerce environment.</p>
+        <p>Ready to deploy! Click below to create your personal lab.</p>
         <div class="info-box">
-            <strong>Important:</strong> On the next screen, if asked for <i>MEDUSA_ADMIN_ONBOARDING_TYPE</i>, type <b>nextjs</b>. Then, click <b>"Connect Neon Postgres"</b> in the Storage section.
+            • If asked for <i>ONBOARDING_TYPE</i>, type <b>nextjs</b>.<br>
+            • Click <b>"Connect Neon Postgres"</b> under Storage.
         </div>
         <a id="deployLink" href="#" target="_blank" class="btn btn-external">🚀 Launch My Store Setup →</a>
     </div>
 
     <div class="step" id="step5">
-        <h2 id="greetKey">Access Your Data Key</h2>
-        <p>Grab the "key" to connect Claude to your database:</p>
+        <h2 id="greetKey">Get Your Data Key</h2>
         <ol>
-            <li>Go to your <b><a href="https://vercel.com/dashboard" target="_blank">Vercel Dashboard</a></b>.</li>
-            <li>Select your new project.</li>
-            <li>In the top menu, click <b>Storage</b> > <b>Neon</b>.</li>
+            <li>Go to <b><a href="https://vercel.com/dashboard" target="_blank">Vercel Dashboard</a></b>.</li>
+            <li>Select your project > <b>Storage</b> > <b>Neon</b>.</li>
             <li>Copy the <b>Postgres Connection String</b>.</li>
         </ol>
         
@@ -122,32 +106,24 @@
 
     <div class="step" id="step6">
         <h2 id="greetConfig">Connect Claude</h2>
-        <p>Copy this block and paste it into Claude (Settings > MCP > Edit Config):</p>
         <div class="code-container">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <code id="mcpCode">"postgresql": {
   "command": "npx",
-  "args": [
-    "-y",
-    "@modelcontextprotocol/server-postgres",
-    "PASTE_URL_HERE?sslmode=require"
-  ]
+  "args": ["-y", "@modelcontextprotocol/server-postgres", "PASTE_URL_HERE?sslmode=require"]
 }</code>
         </div>
     </div>
 
     <div class="step" id="step7">
         <h2 id="greetTest">Run a Test</h2>
-        <p>Ask Claude in a new chat:</p>
-        <div class="info-box" style="background: #f0fdf4; border-color: #22c55e; color: #166534;">
-            "Connect to my database and tell me how many products are currently in stock."
-        </div>
+        <div class="info-box">Ask Claude: "How many products are in my store?"</div>
     </div>
 
     <div class="step" id="step8">
-        <h2 id="greetSuccess">Success!</h2>
-        <p>Your lab is fully set up and ready for the course.</p>
-        <button class="btn btn-next" style="width:100%" onclick="location.reload()">Start Over</button>
+        <h2>Success!</h2>
+        <p>Lab is ready.</p>
+        <button class="btn btn-next" style="width:100%" onclick="location.reload()">Reset</button>
     </div>
 
     <div class="nav-buttons" id="navBtns">
@@ -158,18 +134,14 @@
 
 <script>
     let currentStep = 0;
-    let instructorFirstName = "";
+    let instructorName = "";
 
     function initWizard() {
         const nameVal = document.getElementById('instructorName').value.trim();
         const cohortVal = document.getElementById('courseCohort').value.trim();
-        
-        if (!nameVal || !cohortVal) {
-            alert("Please fill in both name and cohort.");
-            return;
-        }
+        if (!nameVal || !cohortVal) { alert("Please fill in both fields."); return; }
 
-        instructorFirstName = nameVal.split(' ')[0];
+        instructorName = nameVal.split(' ')[0];
         const safeName = nameVal.replace(/\s+/g, '-').toLowerCase();
         const safeCohort = cohortVal.replace(/\s+/g, '-').toLowerCase();
         const projectName = `pm-lab-${safeName}-${safeCohort}`;
@@ -178,53 +150,36 @@
         const envParams = "env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs";
         document.getElementById('deployLink').href = `${baseUrl}&${envParams}&project-name=${projectName}&repository-name=${projectName}`;
         
-        // Personalize headers
-        document.getElementById('greetVercel').innerText = `${instructorFirstName}, Connect Vercel`;
-        document.getElementById('greetGithub').innerText = `${instructorFirstName}, Connect GitHub`;
-        document.getElementById('greetClaude').innerText = `${instructorFirstName}, Prepare Claude`;
-        document.getElementById('greetLaunch').innerText = `Ready to Launch, ${instructorFirstName}!`;
-        document.getElementById('greetKey').innerText = `Data Key for ${instructorFirstName}`;
-        document.getElementById('greetConfig').innerText = `Connect Claude, ${instructorFirstName}`;
-        document.getElementById('greetTest').innerText = `${instructorFirstName}, Test Your Lab`;
-        document.getElementById('greetSuccess').innerText = `Well Done, ${instructorFirstName}!`;
+        // Personalize
+        const greetings = ['greetVercel', 'greetGithub', 'greetClaude', 'greetLaunch', 'greetKey', 'greetConfig', 'greetTest'];
+        greetings.forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText += `, ${instructorName}`; });
 
-        // Show UI elements and Move to Step 1
         document.getElementById('progressBar').style.display = 'flex';
         document.getElementById('navBtns').style.display = 'flex';
         changeStep(1);
     }
 
     function changeStep(n) {
-        const steps = document.querySelectorAll('.step');
-        const progressSteps = document.querySelectorAll('.progress-step');
-        
-        // Hide current step
-        steps[currentStep].classList.remove('active');
-        if (currentStep > 0) progressSteps[currentStep - 1].classList.remove('active');
+        // Hide ALL steps
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.progress-step').forEach(p => p.classList.remove('active'));
 
-        // Update index
         currentStep += n;
         if (currentStep < 0) currentStep = 0;
+        if (currentStep > 8) { location.reload(); return; }
 
-        // Show new step
-        steps[currentStep].classList.add('active');
-        if (currentStep > 0) progressSteps[currentStep - 1].classList.add('active');
-
-        // Update buttons
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
+        // Show Current Step
+        document.getElementById('step' + currentStep).classList.add('active');
         
-        prevBtn.style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
-        nextBtn.innerText = (currentStep === 8) ? 'Finish' : 'Next';
-        
-        if (currentStep > 8) location.reload();
-    }
+        // Handle Progress Bar Highlights
+        for (let i = 1; i <= currentStep; i++) {
+            const p = document.getElementById('p' + i);
+            if (p) p.classList.add('active');
+        }
 
-    function markVerified(btn) {
-        btn.innerText = "Verified ✓";
-        btn.style.borderColor = "#059669";
-        btn.style.color = "#059669";
-        btn.style.background = "#ecfdf5";
+        // Button Visibility
+        document.getElementById('prevBtn').style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
+        document.getElementById('nextBtn').innerText = (currentStep === 8) ? 'Finish' : 'Next';
     }
 
     function copyCode(btn) {
