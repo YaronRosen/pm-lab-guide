@@ -23,9 +23,6 @@
         label { display: block; margin-bottom: 5px; font-weight: 600; color: #374151; font-size: 14px; }
         input[type="text"] { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; }
         
-        .login-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
-        .login-card { border: 1px solid #e5e7eb; padding: 15px; border-radius: 8px; text-align: center; }
-        
         .code-container { position: relative; background: #1e293b; border-radius: 8px; margin: 15px 0; }
         code { color: #f8fafc; padding: 20px; display: block; font-family: monospace; font-size: 12px; white-space: pre; overflow-x: auto; }
         .copy-btn { position: absolute; top: 10px; right: 10px; background: #475569; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
@@ -35,9 +32,10 @@
         .btn-next { background: #2563eb; color: white; }
         .btn-prev { background: #f3f4f6; color: #4b5563; }
         .btn-external { background: #059669; color: white; width: 100%; margin: 10px 0; }
-        .btn-outline { border: 1px solid #d1d5db; background: white; color: #374151; font-size: 13px; width: 100%; }
+        .btn-outline { border: 2px solid #2563eb; background: white; color: #2563eb; width: 100%; margin-top: 10px; }
+        .btn-outline:hover { background: #eff6ff; }
         
-        .info-box { background: #eff6ff; border-left: 4px solid #2563eb; padding: 15px; margin: 15px 0; border-radius: 4px; font-size: 14px; }
+        .info-box { background: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; margin: 15px 0; border-radius: 8px; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -50,82 +48,81 @@
         <div class="progress-step" id="p3">3</div>
         <div class="progress-step" id="p4">4</div>
         <div class="progress-step" id="p5">5</div>
+        <div class="progress-step" id="p6">6</div>
+        <div class="progress-step" id="p7">7</div>
     </div>
 
     <div class="step active" id="step0">
         <h2>Welcome! Let's build your lab.</h2>
-        <p>To ensure a smooth setup, we'll start by personalizing your environment.</p>
+        <p>Before we start, let's personalize your setup.</p>
         
-        <label for="instructorName">Your Full Name</label>
+        <label for="instructorName">Full Name</label>
         <input type="text" id="instructorName" placeholder="e.g. Yaron Rosen">
         
-        <label for="courseCohort">Course Cohort (e.g. Day/Date)</label>
-        <input type="text" id="courseCohort" placeholder="e.g. Monday-Feb-2026">
+        <label for="courseCohort">Course Cohort (e.g. Sunday-Class)</label>
+        <input type="text" id="courseCohort" placeholder="e.g. Feb-2026">
         
-        <button class="btn btn-next" style="width:100%" onclick="goToStep1()">Begin Setup</button>
+        <button class="btn btn-next" style="width:100%" onclick="initWizard()">Start Wizard</button>
     </div>
 
     <div class="step" id="step1">
-        <h2>Account Connection</h2>
-        <p>We need to make sure you are logged into the platforms that will host your lab. Please open these links and sign in (Google login is recommended):</p>
-        
-        <div class="login-grid">
-            <div class="login-card">
-                <strong>Vercel</strong>
-                <p><small>Cloud Hosting</small></p>
-                <a href="https://vercel.com/login" target="_blank" class="btn btn-outline">Login to Vercel</a>
-            </div>
-            <div class="login-card">
-                <strong>GitHub</strong>
-                <p><small>Code Storage</small></p>
-                <a href="https://github.com/login" target="_blank" class="btn btn-outline">Login to GitHub</a>
-            </div>
-        </div>
-        
+        <h2>Step 1: Vercel Login</h2>
+        <p>Vercel will host your website and database. Please make sure you are logged in.</p>
         <div class="info-box">
-            <b>Note:</b> Once you are logged in to both, come back here and click Next.
+            1. Click the button below to open Vercel.<br>
+            2. Sign in with <b>Google</b> (recommended).<br>
+            3. Once logged in, come back here.
         </div>
+        <a href="https://vercel.com/login" target="_blank" class="btn btn-outline">Login to Vercel</a>
     </div>
 
     <div class="step" id="step2">
-        <h2>Prepare Your Analyst</h2>
-        <p>We will use <b>Claude AI</b> as your Product Analyst. Please ensure the following is ready:</p>
-        <ul>
-            <li><b>Claude Desktop:</b> You must have the desktop version installed (not just the website).</li>
-            <li><b>Claude Account:</b> A Pro/Team account is recommended for full MCP features.</li>
-        </ul>
-        <a href="https://claude.ai/download" target="_blank" class="btn btn-outline" style="width: auto;">Download Claude Desktop →</a>
+        <h2>Step 2: GitHub Login</h2>
+        <p>GitHub will store your lab's code privately. Please ensure you are connected.</p>
+        <div class="info-box">
+            1. Click the button below to open GitHub.<br>
+            2. Sign in or create an account (using Google/Email).<br>
+            3. Once logged in, come back here.
+        </div>
+        <a href="https://github.com/login" target="_blank" class="btn btn-outline">Login to GitHub</a>
     </div>
 
     <div class="step" id="step3">
-        <h2 id="greeting3">Step 3: Launch Your Store</h2>
-        <p>Now for the exciting part! This button will automatically build your e-commerce website and database.</p>
-        
-        <div class="info-box" style="background: #fffbeb; border-color: #f59e0b;">
-            <strong>Important Instructions for the next screen:</strong><br>
-            1. If you see a box for <b>MEDUSA_ADMIN_ONBOARDING_TYPE</b>, type <code>nextjs</code>.<br>
-            2. In the <b>Storage</b> section, click <b>"Connect Neon Postgres"</b>.
-        </div>
-        
-        <a id="deployLink" href="#" target="_blank" class="btn btn-external">🚀 Launch My Personal Lab →</a>
-        <p><small>Return here after you see the "Congratulations" screen on Vercel.</small></p>
+        <h2>Step 3: Claude AI Ready</h2>
+        <p>We will use Claude as your Product Analyst. Make sure you have the tools ready:</p>
+        <ul>
+            <li>Ensure <b>Claude Desktop</b> is installed on your computer.</li>
+            <li>Make sure you have an active Claude account.</li>
+        </ul>
+        <a href="https://claude.ai/download" target="_blank" class="btn btn-outline">Download Claude Desktop</a>
     </div>
 
     <div class="step" id="step4">
-        <h2 id="greeting4">Step 4: Get Your Data Key</h2>
-        <p>Your store is live! Now, grab the connection string for the AI:</p>
-        <ol>
-            <li>Go to your <b><a href="https://vercel.com/dashboard" target="_blank">Vercel Dashboard</a></b>.</li>
-            <li>Click on your new project (e.g. <code>pm-lab-...</code>).</li>
-            <li>In the top menu, click the <b>Storage</b> tab.</li>
-            <li>Select <b>Neon</b> and copy the <b>Postgres Connection String</b> (starts with <code>postgres://</code>).</li>
-        </ol>
-        
+        <h2 id="greeting4">Step 4: Launch Your Store</h2>
+        <p>Now that everything is ready, let's deploy your store! This takes about 3 minutes.</p>
+        <div class="info-box" style="border-left: 4px solid #f59e0b; background: #fffbeb;">
+            <strong>Important for the next screen:</strong><br>
+            • If asked for <i>MEDUSA_ADMIN_ONBOARDING_TYPE</i>, type <b>nextjs</b>.<br>
+            • In the <b>Storage</b> section, you MUST click <b>"Connect Neon Postgres"</b>.
+        </div>
+        <a id="deployLink" href="#" target="_blank" class="btn btn-external">🚀 Launch My Personal Lab →</a>
+        <small><i>Note: Return to this tab once you see the "Congratulations" screen.</i></small>
     </div>
 
     <div class="step" id="step5">
-        <h2 id="greeting5">Step 5: Connect Claude</h2>
-        <p>Open <b>Claude Desktop</b> > Settings > MCP > Edit Config. Paste this block:</p>
+        <h2 id="greeting5">Step 5: Get Your Data Key</h2>
+        <p>Store is live! Now, grab the key for the AI:</p>
+        <ol>
+            <li>Go to your <b><a href="https://vercel.com/dashboard" target="_blank">Vercel Dashboard</a></b>.</li>
+            <li>Click on your new project.</li>
+            <li>Click the <b>Storage</b> tab in the top menu.</li>
+            <li>Select <b>Neon</b> and copy the <b>Postgres Connection String</b>.</li>
+        </ol>
+    </div>
+
+    <div class="step" id="step6">
+        <h2 id="greeting6">Step 6: Connect Claude</h2>
+        <p>Paste this code into your <b>Claude Desktop config</b> (Settings > MCP > Edit Config):</p>
         <div class="code-container">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <code id="mcpCode">"postgresql": {
@@ -137,7 +134,13 @@
   ]
 }</code>
         </div>
-        <p style="color: #b91c1c; font-size: 13px;"><b>Final Task:</b> Replace 'PASTE_URL_HERE' with your unique key and save the file.</p>
+        <p><small>Replace 'PASTE_URL_HERE' with your key and Save.</small></p>
+    </div>
+
+    <div class="step" id="step7">
+        <h2>✅ Lab is Ready!</h2>
+        <p>You have successfully built your PM AI Lab.</p>
+        <p>Try asking Claude: <i>"Connect to my database and tell me which product has the most stock."</i></p>
     </div>
 
     <div class="nav-buttons" id="navBtns" style="display:none;">
@@ -150,26 +153,24 @@
     let currentStep = 0;
     let firstName = "";
 
-    function goToStep1() {
+    function initWizard() {
         const fullName = document.getElementById('instructorName').value.trim();
         const cohort = document.getElementById('courseCohort').value.trim();
         
-        if (!fullName || !cohort) { alert("Please fill in both fields."); return; }
+        if (!fullName || !cohort) { alert("Please fill in your details."); return; }
         
         firstName = fullName.split(' ')[0];
         const safeName = fullName.replace(/\s+/g, '-').toLowerCase();
         const safeCohort = cohort.replace(/\s+/g, '-').toLowerCase();
         const projectName = `pm-lab-${safeName}-${safeCohort}`;
         
-        // Link Generation
         const baseUrl = "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default";
         const envParams = "env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs";
         document.getElementById('deployLink').href = `${baseUrl}&${envParams}&project-name=${projectName}&repository-name=${projectName}`;
         
-        // Update Personalization
-        document.getElementById('greeting3').innerText = `Step 3: Launch ${firstName}'s Store`;
-        document.getElementById('greeting4').innerText = `Step 4: Access Your Data, ${firstName}`;
-        document.getElementById('greeting5').innerText = `${firstName}, Final Connection`;
+        document.getElementById('greeting4').innerText = `Step 4: Launch ${firstName}'s Store`;
+        document.getElementById('greeting5').innerText = `Step 5: Get Your Data, ${firstName}`;
+        document.getElementById('greeting6').innerText = `Step 6: ${firstName}, Connect Claude`;
 
         changeStep(1);
         document.getElementById('progressBar').style.display = 'flex';
@@ -177,22 +178,15 @@
     }
 
     function changeStep(n) {
-        if (currentStep + n < 0) return;
-        
+        if (currentStep + n < 0 || currentStep + n > 7) return;
         document.getElementById(`step${currentStep}`).classList.remove('active');
-        const prevProgress = document.getElementById(`p${currentStep}`);
-        if(prevProgress) prevProgress.classList.remove('active');
-        
+        document.getElementById(`p${currentStep}`).classList.remove('active');
         currentStep += n;
-        
         document.getElementById(`step${currentStep}`).classList.add('active');
-        const nextProgress = document.getElementById(`p${currentStep}`);
-        if(nextProgress) nextProgress.classList.add('active');
-        
+        document.getElementById(`p${currentStep}`).classList.add('active');
         document.getElementById('prevBtn').disabled = (currentStep <= 1);
-        document.getElementById('nextBtn').innerText = (currentStep === 5) ? 'Finish' : 'Next';
-        
-        if (currentStep > 5) location.reload();
+        document.getElementById('nextBtn').innerText = (currentStep === 7) ? 'Finish' : 'Next';
+        if (currentStep > 7) location.reload();
     }
 
     function copyCode(btn) {
