@@ -12,6 +12,7 @@
             --text-dark: #111827;
             --text-muted: #4b5563;
             --border-color: #e5e7eb;
+            --disabled-gray: #9ca3af;
         }
 
         body { 
@@ -82,6 +83,7 @@
         .nav-btn { height: 44px; padding: 0 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 0.9rem; min-width: 110px; }
         .btn-back { background: var(--bg-gray); color: var(--text-muted); border: 1px solid var(--border-color); }
         .btn-next { background: var(--primary-blue); color: white; flex-grow: 1; }
+        .btn-next:disabled { background: var(--disabled-gray); cursor: not-allowed; }
         
         .copy-box { background: #f3f4f6; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; margin: 10px 0; display: block; text-align: center; border: 2px dashed var(--primary-blue); color: var(--primary-blue); font-weight: bold; }
     </style>
@@ -131,23 +133,22 @@
 
     <div class="step" id="step3">
         <h2 id="h3">Database Infrastructure</h2>
-        <p>We will now provision a <b>Neon Postgres</b> database for your store.</p>
+        <p>Provision your <b>Neon Postgres</b> database for the store.</p>
         <div class="info-box">
             <b>Action Required:</b><br>
-            1. Go to Vercel Dashboard > <b>Add New...</b> > <b>Storage</b>.<br>
-            2. Choose <b>Neon</b> and click <b>Create</b>.<br>
-            3. On the "Create Database" screen, press <b>Continue</b>.<br>
-            4. In the <b>Database Name (*)</b> field, paste this exact unique name:<br>
+            1. Go to Vercel > <b>Add New...</b> > <b>Storage</b> > <b>Neon</b> > <b>Create</b>.<br>
+            2. Press <b>Continue</b>, then paste this unique name:<br>
             <span id="uniqueDbName" class="copy-box">Generating...</span><br>
-            5. Press <b>Create</b>, and on the next page, press <b>Done</b>.<br>
-            6. In the <b>Quickstart</b> tab, click <b>Show secret</b> and copy the <b>DATABASE_URL</b>.
+            3. Press <b>Create</b>, then press <b>Done</b>.<br>
+            4. In the <b>Quickstart</b> tab, click <b>Show secret</b> and copy the <b>DATABASE_URL</b> string.
         </div>
-        
+        <label>Paste your Connection String (DATABASE_URL) to continue:</label>
+        <input type="text" id="dbUrlInput" placeholder="postgres://..." oninput="validateDatabaseKey()">
     </div>
 
     <div class="step" id="step4">
         <h2 id="h4">Deploy Lab</h2>
-        <p>Launch your deployment. The project name matches your database exactly.</p>
+        <p>Launch your deployment using the unique ID generated below.</p>
         <div class="info-box">
             <b>Vercel Settings:</b><br>
             • Repository Name: <b><span id="uniqueRepoName">...</span></b><br>
@@ -160,9 +161,9 @@
 
     <div class="step" id="step5">
         <h2 id="h5">Claude AI Analyst</h2>
-        <p>Paste this config into Claude Desktop to link the AI to your unique database.</p>
+        <p>Copy this configuration. Your connection string has been automatically injected.</p>
         <div class="code-container">
-            <code>"postgresql": {
+            <code id="mcpConfig">"postgresql": {
   "command": "npx",
   "args": ["-y", "@modelcontextprotocol/server-postgres", "PASTE_URL_HERE?sslmode=require"]
 }</code>
@@ -176,7 +177,7 @@
 
     <div class="step" id="step7">
         <h2>Setup Complete</h2>
-        <p>Congratulations! Your unique AI Product Lab is ready.</p>
+        <p>Congratulations! Your AI Product Lab is ready.</p>
         <div class="btn-container">
             <button class="btn-action" onclick="location.reload()">Finish</button>
         </div>
@@ -184,7 +185,7 @@
 
     <div class="nav-buttons" id="navBtns">
         <button class="nav-btn btn-back" id="prevBtn" onclick="changeStep(-1)">Back</button>
-        <button class="nav-btn btn-next" id="nextBtn" onclick="changeStep(1)">Next Step</button>
+        <button class="nav-btn btn-next" id="nextBtn" onclick="changeStep(1)" disabled>Next Step</button>
     </div>
 </div>
 
@@ -199,6 +200,25 @@
                String(now.getSeconds()).padStart(2, '0');
     }
 
+    function validateDatabaseKey() {
+        const inputVal = document.getElementById('dbUrlInput').value.trim();
+        const nextBtn = document.getElementById('nextBtn');
+        
+        // Enable Next button only if a valid postgres string is entered
+        if (inputVal.startsWith('postgres://')) {
+            nextBtn.disabled = false;
+            
+            // Update Claude config dynamically
+            const configText = `"postgresql": {
+  "command": "npx",
+  "args": ["-y", "@modelcontextprotocol/server-postgres", "${inputVal}?sslmode=require"]
+}`;
+            document.getElementById('mcpConfig').innerText = configText;
+        } else {
+            nextBtn.disabled = true;
+        }
+    }
+
     function initWizard() {
         const n = document.getElementById('instructorName').value.trim();
         const c = document.getElementById('courseCohort').value.trim();
@@ -208,10 +228,8 @@
         const safeN = n.replace(/\s+/g, '-').toLowerCase();
         const safeC = c.replace(/\s+/g, '-').toLowerCase();
         
-        // Locked Unique Name for the entire session
         finalProjectName = `pm-lab-${safeN}-${safeC}-${getTimestamp()}`;
         
-        // Update all UI elements with the locked name
         document.getElementById('uniqueDbName').innerText = finalProjectName;
         document.getElementById('uniqueRepoName').innerText = finalProjectName;
         
@@ -231,16 +249,31 @@
     function changeStep(n) {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.progress-step').forEach(p => p.classList.remove('active'));
+        
         currentStep += n;
+        
         if (currentStep < 0) currentStep = 0;
         if (currentStep > 7) { location.reload(); return; }
+        
         document.getElementById('step' + currentStep).classList.add('active');
         for (let i = 1; i <= currentStep; i++) {
             const p = document.getElementById('p' + i);
             if (p) p.classList.add('active');
         }
-        document.getElementById('prevBtn').style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
-        document.getElementById('nextBtn').innerText = (currentStep === 7) ? 'Finish' : 'Next Step';
+        
+        // Navigation Control Logic
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        
+        prevBtn.style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
+        nextBtn.innerText = (currentStep === 7) ? 'Finish' : 'Next Step';
+        
+        // Special Case: Block Step 3 unless DB key is present
+        if (currentStep === 3) {
+            validateDatabaseKey();
+        } else {
+            nextBtn.disabled = false;
+        }
     }
 </script>
 
