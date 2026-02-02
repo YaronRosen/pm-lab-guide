@@ -53,7 +53,8 @@
         p { font-size: 0.9rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px; }
         
         label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.8rem; }
-        input[type="text"] { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.9rem; margin-bottom: 20px; box-sizing: border-box; }
+        input[type="text"] { width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 0.9rem; margin-bottom: 20px; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+        input[type="text"]:focus { border-color: var(--primary-blue); }
         
         .info-box { background: #f0f7ff; border-left: 4px solid var(--primary-blue); padding: 15px; margin: 15px 0; border-radius: 4px; font-size: 0.85rem; color: #1e40af; }
         .code-container { position: relative; background: #1e293b; border-radius: 10px; padding: 15px; margin: 15px 0; }
@@ -83,10 +84,10 @@
         .nav-btn { height: 44px; padding: 0 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 0.9rem; min-width: 110px; }
         .btn-back { background: var(--bg-gray); color: var(--text-muted); border: 1px solid var(--border-color); }
         .btn-next { background: var(--primary-blue); color: white; flex-grow: 1; }
-        .btn-next:disabled { background: var(--disabled-gray); cursor: not-allowed; opacity: 0.5; }
+        .btn-next:disabled { background: var(--disabled-gray); cursor: not-allowed; opacity: 0.6; }
         
         .copy-box { background: #f3f4f6; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; margin: 10px 0; display: block; text-align: center; border: 2px dashed var(--primary-blue); color: var(--primary-blue); font-weight: bold; }
-        .validation-msg { font-size: 0.8rem; margin-top: -15px; margin-bottom: 15px; display: none; }
+        .valid-badge { background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; display: none; margin-top: -15px; margin-bottom: 15px; width: fit-content; }
     </style>
 </head>
 <body>
@@ -106,7 +107,7 @@
 
     <div class="step active" id="step0">
         <h2>Initial Information</h2>
-        <p>Enter your details. A unique ID with the current time will be generated for your lab infrastructure.</p>
+        <p>Provide your course details. We will use these to label your infrastructure uniquely.</p>
         <label>Full Name</label>
         <input type="text" id="instructorName" placeholder="e.g. Yaron Rosen">
         <label>Course Cohort Date</label>
@@ -117,29 +118,28 @@
     </div>
 
     <div class="step" id="step1">
-        <h2 id="h1">Vercel Cloud</h2>
+        <h2 id="h1">Vercel Login</h2>
         <div class="btn-container"><a href="https://vercel.com/login" target="_blank" class="btn-action">Login to Vercel</a></div>
     </div>
     <div class="step" id="step2">
-        <h2 id="h2">GitHub Storage</h2>
+        <h2 id="h2">GitHub Login</h2>
         <div class="btn-container"><a href="https://github.com/login" target="_blank" class="btn-action">Login to GitHub</a></div>
     </div>
 
     <div class="step" id="step3">
         <h2 id="h3">Database Infrastructure</h2>
-        <p>Provision your <b>Neon Postgres</b> database.</p>
+        <p>Provision your <b>Neon Postgres</b> database in Vercel.</p>
         <div class="info-box">
             <b>Action Required:</b><br>
-            1. Go to Vercel Dashboard > <b>Add New...</b> > <b>Storage</b>.<br>
-            2. Choose <b>Neon</b> and click <b>Create</b>.<br>
-            3. On the "Create Database" screen, press <b>Continue</b>.<br>
-            4. Name your DB: <b><span id="uniqueDbName" class="copy-box">Generating...</span></b><br>
-            5. Press <b>Create</b>, then press <b>Done</b>.<br>
-            6. In the <b>Quickstart</b> tab, click <b>Show secret</b> and copy the <b>DATABASE_URL</b>.
+            1. Go to Vercel > <b>Add New...</b> > <b>Storage</b> > <b>Neon</b> > <b>Create</b>.<br>
+            2. Press <b>Continue</b>, then paste this unique name:<br>
+            <span id="uniqueDbName" class="copy-box">Generating...</span><br>
+            3. Press <b>Create</b>, then press <b>Done</b>.<br>
+            4. Copy the <b>DATABASE_URL</b> from the Quickstart tab.
         </div>
-        <label>Paste your <b>DATABASE_URL</b> here to unlock Next Step:</label>
-        <input type="text" id="dbUrlInput" placeholder="postgres://..." oninput="validateDatabaseKey()">
-        <div id="validMsg" class="validation-msg" style="color: #059669;">Valid database URL detected ✓</div>
+        <label>Paste DATABASE_URL here to unlock Next Step:</label>
+        <input type="text" id="dbUrlInput" placeholder="postgresql://..." oninput="validateDatabaseKey()">
+        <div id="validBadge" class="valid-badge">URL Validated ✓</div>
     </div>
 
     <div class="step" id="step4">
@@ -155,16 +155,15 @@
 
     <div class="step" id="step5">
         <h2 id="h5">Claude AI Analyst</h2>
-        <p>Your connection string has been automatically injected into the configuration below.</p>
         <div class="code-container">
             <code id="mcpConfig">"postgresql": {
   "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-postgres", "PASTE_URL_HERE?sslmode=require"]
+  "args": ["-y", "@modelcontextprotocol/server-postgres", "PASTE_URL_HERE"]
 }</code>
         </div>
     </div>
 
-    <div class="step" id="step6"><h2 id="h6">Final Test</h2><div class="info-box">Ask Claude to list product categories.</div></div>
+    <div class="step" id="step6"><h2 id="h6">Final Test</h2><div class="info-box">Ask Claude: "Tell me how many products are in stock."</div></div>
     <div class="step" id="step7"><h2>Setup Complete</h2><div class="btn-container"><button class="btn-action" onclick="location.reload()">Finish</button></div></div>
 
     <div class="nav-buttons" id="navBtns">
@@ -185,35 +184,37 @@
     }
 
     function validateDatabaseKey() {
+        // FIXED: Using trim() to remove invisible spaces and a wider check
         const inputVal = document.getElementById('dbUrlInput').value.trim();
         const nextBtn = document.getElementById('nextBtn');
-        const msg = document.getElementById('validMsg');
+        const badge = document.getElementById('validBadge');
         
-        // Flexible validation for both postgres:// and postgresql://
-        const isValid = inputVal.startsWith('postgres://') || inputVal.startsWith('postgresql://');
+        const isPostgres = inputVal.toLowerCase().includes('postgres://') || inputVal.toLowerCase().includes('postgresql://');
         
-        if (isValid) {
+        if (isPostgres && inputVal.length > 20) {
             nextBtn.disabled = false;
-            msg.style.display = 'block';
+            badge.style.display = 'block';
             
-            // Dynamic update of the config block for Step 5
-            const configText = `"postgresql": {
+            // Format URL for Claude
+            let formattedUrl = inputVal;
+            if (!formattedUrl.includes('?')) formattedUrl += '?sslmode=require';
+            
+            document.getElementById('mcpConfig').innerText = `"postgresql": {
   "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-postgres", "${inputVal.includes('?') ? inputVal : inputVal + '?sslmode=require'}"]
+  "args": ["-y", "@modelcontextprotocol/server-postgres", "${formattedUrl}"]
 }`;
-            document.getElementById('mcpConfig').innerText = configText;
         } else {
             nextBtn.disabled = true;
-            msg.style.display = 'none';
+            badge.style.display = 'none';
         }
     }
 
     function initWizard() {
         const n = document.getElementById('instructorName').value.trim();
         const c = document.getElementById('courseCohort').value.trim();
-        if (!n || !c) { alert("Please complete both fields."); return; }
+        if (!n || !c) { alert("Fill all fields."); return; }
         
-        const instructorFirstName = n.split(' ')[0];
+        const firstName = n.split(' ')[0];
         const safeN = n.replace(/\s+/g, '-').toLowerCase();
         const safeC = c.replace(/\s+/g, '-').toLowerCase();
         
@@ -221,13 +222,12 @@
         document.getElementById('uniqueDbName').innerText = finalProjectName;
         document.getElementById('uniqueRepoName').innerText = finalProjectName;
         
-        const baseUrl = "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default";
-        const envParams = "env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs";
-        document.getElementById('deployLink').href = `${baseUrl}&${envParams}&project-name=${finalProjectName}&repository-name=${finalProjectName}`;
+        const deployUrl = `https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default&env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs&project-name=${finalProjectName}&repository-name=${finalProjectName}`;
+        document.getElementById('deployLink').href = deployUrl;
         
         for(let i=1; i<=6; i++) {
             const el = document.getElementById('h'+i);
-            if(el) el.innerText += `, ${instructorFirstName}`;
+            if(el) el.innerText += `, ${firstName}`;
         }
         document.getElementById('progressBar').style.display = 'flex';
         document.getElementById('navBtns').style.display = 'flex';
@@ -238,8 +238,6 @@
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.progress-step').forEach(p => p.classList.remove('active'));
         currentStep += n;
-        if (currentStep < 0) currentStep = 0;
-        if (currentStep > 7) { location.reload(); return; }
         
         document.getElementById('step' + currentStep).classList.add('active');
         for (let i = 1; i <= currentStep; i++) {
@@ -249,13 +247,9 @@
         
         const nextBtn = document.getElementById('nextBtn');
         document.getElementById('prevBtn').style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
-        nextBtn.innerText = (currentStep === 7) ? 'Finish' : 'Next Step';
         
-        if (currentStep === 3) {
-            validateDatabaseKey();
-        } else {
-            nextBtn.disabled = false;
-        }
+        if (currentStep === 3) validateDatabaseKey();
+        else nextBtn.disabled = false;
     }
 </script>
 
