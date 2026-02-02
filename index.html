@@ -141,7 +141,7 @@
 
     <div class="step" id="step4">
         <h2 id="h4">Deploy Lab Environment</h2>
-        <p>With the infrastructure ready, we will now launch the store. Click the button below to trigger the deployment.</p>
+        <p>Trigger the deployment now. Each deployment has a unique ID to prevent naming conflicts.</p>
         <div class="info-box">
             <b>Vercel Prompts:</b><br>
             1. Look for the variable <code>MEDUSA_ADMIN_ONBOARDING_TYPE</code>.<br>
@@ -191,14 +191,24 @@
     let currentStep = 0;
     let instructorName = "";
 
+    function generateUniqueID() {
+        // Generates a 4-character random alphanumeric string
+        return Math.random().toString(36).substring(2, 6);
+    }
+
     function initWizard() {
         const n = document.getElementById('instructorName').value.trim();
         const c = document.getElementById('courseCohort').value.trim();
         if (!n || !c) { alert("Please complete both fields."); return; }
+        
         instructorName = n.split(' ')[0];
         const safeN = n.replace(/\s+/g, '-').toLowerCase();
         const safeC = c.replace(/\s+/g, '-').toLowerCase();
-        const projectName = `pm-lab-${safeN}-${safeC}`;
+        
+        // Creating the unique project name: name-cohort-randomID
+        const uniqueID = generateUniqueID();
+        const projectName = `pm-lab-${safeN}-${safeC}-${uniqueID}`;
+        
         const baseUrl = "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmedusajs%2Fmedusa-starter-default";
         const envParams = "env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs";
         document.getElementById('deployLink').href = `${baseUrl}&${envParams}&project-name=${projectName}&repository-name=${projectName}`;
