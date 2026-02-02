@@ -15,14 +15,13 @@
         }
 
         body { 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            font-family: 'Inter', -apple-system, sans-serif; 
             background-color: #f3f4f6; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             min-height: 100vh; 
             margin: 0; 
-            color: var(--text-dark);
         }
 
         .wizard-container { 
@@ -31,7 +30,7 @@
             max-width: 550px; 
             padding: 40px; 
             border-radius: 20px; 
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
             box-sizing: border-box; 
         }
 
@@ -44,66 +43,53 @@
         }
         
         /* Progress Bar */
-        .progress-bar { display: none; justify-content: space-between; margin-bottom: 35px; position: relative; padding: 0 10px; }
-        .progress-bar::before { content: ""; background: var(--border-color); height: 2px; width: calc(100% - 20px); position: absolute; top: 15px; left: 10px; z-index: 0; }
-        .progress-step { width: 32px; height: 32px; background: white; border: 2px solid var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; z-index: 1; position: relative; color: var(--text-muted); transition: 0.3s; }
+        .progress-bar { display: none; justify-content: space-between; margin-bottom: 35px; position: relative; }
+        .progress-bar::before { content: ""; background: var(--border-color); height: 2px; width: 100%; position: absolute; top: 15px; left: 0; z-index: 0; }
+        .progress-step { width: 30px; height: 30px; background: white; border: 2px solid var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; z-index: 1; position: relative; color: var(--text-muted); }
         .progress-step.active { background: var(--primary-blue); border-color: var(--primary-blue); color: white; }
         
-        /* Typography */
-        h1 { font-size: 1.5rem; font-weight: 800; margin: 0 0 8px 0; text-align: center; letter-spacing: -0.025em; }
-        .subtitle { font-size: 0.9rem; color: var(--text-muted); text-align: center; margin-bottom: 30px; }
-        h2 { font-size: 1.25rem; font-weight: 700; margin-top: 0; margin-bottom: 16px; color: var(--text-dark); }
-        p { font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px; }
+        h1 { font-size: 1.4rem; font-weight: 800; margin: 0 0 20px 0; text-align: center; color: var(--text-dark); }
+        h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; color: var(--text-dark); border-bottom: 2px solid var(--bg-gray); padding-bottom: 8px;}
+        p { font-size: 0.9rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px; }
         
-        /* Form Elements */
-        label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--text-dark); font-size: 0.85rem; }
-        input[type="text"] { width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1rem; margin-bottom: 20px; box-sizing: border-box; transition: border-color 0.2s; }
-        input[type="text"]:focus { outline: none; border-color: var(--primary-blue); ring: 2px var(--primary-blue); }
+        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.8rem; }
+        input[type="text"] { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; margin-bottom: 20px; box-sizing: border-box; }
         
-        /* Specialized Containers */
-        .system-desc { background: var(--bg-gray); border: 1px solid var(--border-color); padding: 16px; border-radius: 12px; margin: 20px 0; font-size: 0.9rem; }
-        .info-box { background: #fefce8; border-left: 4px solid #eab308; padding: 16px; margin: 20px 0; border-radius: 8px; font-size: 0.85rem; color: #854d0e; }
-        .code-container { position: relative; background: #1e293b; border-radius: 12px; margin: 20px 0; padding: 20px; overflow: hidden; }
-        code { color: #f8fafc; display: block; font-family: 'Fira Code', monospace; font-size: 0.8rem; white-space: pre; overflow-x: auto; }
+        .info-box { background: #f0f7ff; border-left: 4px solid var(--primary-blue); padding: 15px; margin: 15px 0; border-radius: 4px; font-size: 0.85rem; color: #1e40af; }
+        .code-container { position: relative; background: #1e293b; border-radius: 10px; padding: 15px; margin: 15px 0; }
+        code { color: #f8fafc; font-family: monospace; font-size: 0.8rem; white-space: pre; overflow-x: auto; display: block; }
 
-        /* Unified Button Design */
-        .nav-buttons { display: none; justify-content: space-between; margin-top: 32px; gap: 16px; }
-        
-        .btn { 
-            height: 48px;
-            padding: 0 24px; 
-            border-radius: 10px; 
+        /* Unified Blue Buttons */
+        .btn-container { display: flex; justify-content: center; width: 100%; margin-top: 10px; }
+        .btn-action { 
+            background: var(--primary-blue); 
+            color: white; 
+            width: 100%; 
+            max-width: 280px; 
+            height: 44px; 
+            border-radius: 8px; 
             font-weight: 600; 
-            font-size: 0.95rem;
-            cursor: pointer; 
+            font-size: 0.9rem; 
             border: none; 
-            transition: all 0.2s; 
-            text-decoration: none; 
-            display: inline-flex; 
+            cursor: pointer; 
+            display: flex; 
             align-items: center; 
-            justify-content: center;
-            box-sizing: border-box;
+            justify-content: center; 
+            text-decoration: none;
+            transition: background 0.2s;
         }
+        .btn-action:hover { background: var(--hover-blue); }
 
-        .btn-primary { background: var(--primary-blue); color: white; width: 100%; }
-        .btn-primary:hover { background: var(--hover-blue); transform: translateY(-1px); }
-        
-        .btn-secondary { background: var(--bg-gray); color: var(--text-muted); border: 1px solid var(--border-color); flex: 1; }
-        .btn-secondary:hover { background: #f3f4f6; }
-        
-        .btn-next { flex: 2; background: var(--primary-blue); color: white; }
-        .btn-next:hover { background: var(--hover-blue); }
-
-        .center-wrap { display: flex; justify-content: center; width: 100%; }
-        
-        .verified-text { color: #059669; font-weight: 600; font-size: 0.85rem; display: none; margin-top: 8px; text-align: center; }
+        .nav-buttons { display: none; justify-content: space-between; margin-top: 30px; gap: 15px; }
+        .nav-btn { height: 40px; padding: 0 20px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-size: 0.85rem; min-width: 100px; }
+        .btn-back { background: var(--bg-gray); color: var(--text-muted); border: 1px solid var(--border-color); }
+        .btn-next { background: var(--primary-blue); color: white; flex-grow: 1; }
     </style>
 </head>
 <body>
 
 <div class="wizard-container">
     <h1>Instructor Lab Setup</h1>
-    <div class="subtitle">Personalized AI Environment Wizard</div>
     
     <div class="progress-bar" id="progressBar">
         <div class="progress-step" id="p1">1</div>
@@ -117,63 +103,69 @@
     </div>
 
     <div class="step active" id="step0">
-        <h2>Start Your Journey</h2>
-        <p>Enter your details below to customize your lab environment and track your students' progress.</p>
-        <label>Full Name</label>
+        <h2>Personalize Your Lab</h2>
+        <p>Welcome! Let's start by identifying your course details to keep your lab environments organized.</p>
+        <label>Instructor Full Name</label>
         <input type="text" id="instructorName" placeholder="e.g. Yaron Rosen">
-        <label>Course Cohort</label>
-        <input type="text" id="courseCohort" placeholder="e.g. Spring 2026">
-        <button class="btn btn-primary" onclick="initWizard()">Initialize Wizard</button>
+        <label>Course Cohort / Semester</label>
+        <input type="text" id="courseCohort" placeholder="e.g. Fall-2026-Group-A">
+        <div class="btn-container">
+            <button class="btn-action" onclick="initWizard()">Initialize Wizard</button>
+        </div>
     </div>
 
     <div class="step" id="step1">
-        <h2 id="greetVercel">Vercel Login</h2>
-        <div class="system-desc"><b>Hosting Platform:</b> Vercel manages the live cloud infrastructure for your store and database.</div>
-        <p>Please log in to your Vercel account in a new tab.</p>
-        <a href="https://vercel.com/login" target="_blank" class="btn btn-primary" onclick="showVerified('vVer')">Log in to Vercel</a>
-        <div id="vVer" class="verified-text">Connection ready ✓</div>
+        <h2 id="h1">Vercel Cloud Connection</h2>
+        <p>Vercel is the professional cloud platform that will host your live store and database.</p>
+        <div class="btn-container">
+            <a href="https://vercel.com/login" target="_blank" class="btn-action">Login to Vercel</a>
+        </div>
     </div>
 
     <div class="step" id="step2">
-        <h2 id="greetGithub">GitHub Login</h2>
-        <div class="system-desc"><b>Code Storage:</b> GitHub stores your private lab blueprints. Vercel uses this to build your environment.</div>
-        <p>Ensure you are signed in to GitHub to sync your project.</p>
-        <a href="https://github.com/login" target="_blank" class="btn btn-primary" onclick="showVerified('gVer')">Log in to GitHub</a>
-        <div id="gVer" class="verified-text">GitHub connected ✓</div>
+        <h2 id="h2">GitHub Code Storage</h2>
+        <p>GitHub securely stores your lab's code. This allows Vercel to build the store from a private blueprint.</p>
+        <div class="btn-container">
+            <a href="https://github.com/login" target="_blank" class="btn-action">Login to GitHub</a>
+        </div>
     </div>
 
     <div class="step" id="step3">
-        <h2 id="greetStorage">Pre-Launch Checklist</h2>
-        <p>To prevent build errors, we must prepare the database connection.</p>
+        <h2 id="h3">Database Infrastructure</h2>
+        <p>Your store needs a <b>Postgres Database</b> to save product and customer data. We will provision this during the launch.</p>
         <div class="info-box">
-            <b>Pro Tip:</b> In the next step, once you click "Launch," look for the <b>Storage</b> section immediately and select <b>Connect Neon Postgres</b>.
+            <b>The "No-Fail" Secret:</b> In the next step, once the Vercel screen opens, look for the <b>Storage</b> section immediately and click <b>Connect Neon Postgres</b> before doing anything else.
         </div>
         
     </div>
 
     <div class="step" id="step4">
-        <h2 id="greetLaunch">Launch Environment</h2>
-        <p>Ready to deploy your personal lab. This process usually takes 2-3 minutes.</p>
+        <h2 id="h4">Deploy Your Environment</h2>
+        <p>Click the button below to trigger the deployment. Follow the prompts on the Vercel screen.</p>
         <div class="info-box">
-            <b>Variable:</b> nextjs<br>
-            <b>Storage:</b> Connect Neon Postgres
+            1. <b>Storage:</b> Click "Connect Neon Postgres" first.<br>
+            2. <b>Variable:</b> Enter <code>nextjs</code> for the onboarding type.<br>
+            3. <b>Action:</b> Click the <b>Deploy</b> button.
         </div>
-        <a id="deployLink" href="#" target="_blank" class="btn btn-primary">🚀 Launch Store Setup</a>
+        <div class="btn-container">
+            <a id="deployLink" href="#" target="_blank" class="btn-action">🚀 Launch Store Setup</a>
+        </div>
     </div>
 
     <div class="step" id="step5">
-        <h2 id="greetKey">Retrieve Data Key</h2>
-        <p>Your store is live! Now grab the unique key to connect Claude AI to your database.</p>
-        <ol style="font-size: 0.9rem; color: var(--text-muted); padding-left: 20px;">
-            <li>Go to <b>Vercel Dashboard</b> > Select Project.</li>
-            <li>Go to <b>Storage</b> > <b>Neon</b>.</li>
+        <h2 id="h5">Access Connection String</h2>
+        <p>Now that your infrastructure is provisioned, let's grab the access key for your AI Analyst.</p>
+        <ol style="font-size: 0.85rem; color: var(--text-muted);">
+            <li>Open your Vercel Dashboard and select the new project.</li>
+            <li>Navigate to <b>Storage</b> > <b>Neon</b>.</li>
             <li>Copy the <b>Postgres Connection String</b>.</li>
         </ol>
+        
     </div>
 
     <div class="step" id="step6">
-        <h2 id="greetConfig">Connect to Claude</h2>
-        <p>Open Claude Desktop (Settings > MCP > Edit Config) and paste this block:</p>
+        <h2 id="h6">Connect Claude AI</h2>
+        <p>Open Claude Desktop (Settings > MCP > Edit Config) and paste this block to link the AI to your database.</p>
         <div class="code-container">
             <code>"postgresql": {
   "command": "npx",
@@ -183,21 +175,24 @@
     </div>
 
     <div class="step" id="step7">
-        <h2 id="greetTest">Final System Test</h2>
-        <div class="info-box" style="background: #f0fdf4; border-color: #22c55e; color: #166534;">
-            Ask Claude: "List the top 3 product categories by inventory count."
+        <h2 id="h7">System Verification</h2>
+        <p>Let's confirm the connection is active. Open a new chat in Claude and ask:</p>
+        <div class="info-box">
+            "Connect to my database and tell me the names of the top 3 products in stock."
         </div>
     </div>
 
     <div class="step" id="step8">
         <h2>Setup Complete</h2>
-        <p>Congratulations! Your AI-powered Product Management lab is fully configured and ready for class.</p>
-        <button class="btn btn-primary" onclick="location.reload()">Restart Wizard</button>
+        <p>Excellent work! Your AI-powered Product Lab is now fully operational and ready for your students.</p>
+        <div class="btn-container">
+            <button class="btn-action" onclick="location.reload()">Restart Wizard</button>
+        </div>
     </div>
 
     <div class="nav-buttons" id="navBtns">
-        <button class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)">Back</button>
-        <button class="btn btn-next" id="nextBtn" onclick="changeStep(1)">Next Step</button>
+        <button class="nav-btn btn-back" id="prevBtn" onclick="changeStep(-1)">Back</button>
+        <button class="nav-btn btn-next" id="nextBtn" onclick="changeStep(1)">Next</button>
     </div>
 </div>
 
@@ -208,8 +203,7 @@
     function initWizard() {
         const n = document.getElementById('instructorName').value.trim();
         const c = document.getElementById('courseCohort').value.trim();
-        if (!n || !c) { alert("Please complete all fields."); return; }
-
+        if (!n || !c) { alert("Please fill in both fields."); return; }
         instructorName = n.split(' ')[0];
         const safeN = n.replace(/\s+/g, '-').toLowerCase();
         const safeC = c.replace(/\s+/g, '-').toLowerCase();
@@ -218,9 +212,10 @@
         const envParams = "env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs";
         document.getElementById('deployLink').href = `${baseUrl}&${envParams}&project-name=${projectName}&repository-name=${projectName}`;
         
-        const ids = ['greetVercel', 'greetGithub', 'greetStorage', 'greetLaunch', 'greetKey', 'greetConfig', 'greetTest'];
-        ids.forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText += `, ${instructorName}`; });
-        
+        for(let i=1; i<=7; i++) {
+            const el = document.getElementById('h'+i);
+            if(el) el.innerText += `, ${instructorName}`;
+        }
         document.getElementById('progressBar').style.display = 'flex';
         document.getElementById('navBtns').style.display = 'flex';
         changeStep(1);
@@ -229,23 +224,16 @@
     function changeStep(n) {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.progress-step').forEach(p => p.classList.remove('active'));
-
         currentStep += n;
         if (currentStep < 0) currentStep = 0;
         if (currentStep > 8) { location.reload(); return; }
-
         document.getElementById('step' + currentStep).classList.add('active');
         for (let i = 1; i <= currentStep; i++) {
             const p = document.getElementById('p' + i);
             if (p) p.classList.add('active');
         }
-
         document.getElementById('prevBtn').style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
-        document.getElementById('nextBtn').innerText = (currentStep === 8) ? 'Finish' : 'Next Step';
-    }
-
-    function showVerified(id) {
-        document.getElementById(id).style.display = 'block';
+        document.getElementById('nextBtn').innerText = (currentStep === 8) ? 'Finish' : 'Next';
     }
 </script>
 
