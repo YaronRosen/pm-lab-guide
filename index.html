@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PM Expert | Lab Setup Wizard</title>
+    <title>PM Expert | AI Lab Setup</title>
     <style>
         :root {
             --primary-blue: #2563eb;
@@ -42,7 +42,6 @@
             to { opacity: 1; transform: translateY(0); } 
         }
         
-        /* Progress Bar */
         .progress-bar { display: none; justify-content: space-between; margin-bottom: 35px; position: relative; }
         .progress-bar::before { content: ""; background: var(--border-color); height: 2px; width: 100%; position: absolute; top: 15px; left: 0; z-index: 0; }
         .progress-step { width: 30px; height: 30px; background: white; border: 2px solid var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; z-index: 1; position: relative; color: var(--text-muted); }
@@ -59,29 +58,28 @@
         .code-container { position: relative; background: #1e293b; border-radius: 10px; padding: 15px; margin: 15px 0; }
         code { color: #f8fafc; font-family: monospace; font-size: 0.8rem; white-space: pre; overflow-x: auto; display: block; }
 
-        /* Unified Blue Buttons */
-        .btn-container { display: flex; justify-content: center; width: 100%; margin-top: 10px; }
+        .btn-container { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; margin-top: 10px; }
         .btn-action { 
             background: var(--primary-blue); 
             color: white; 
             width: 100%; 
-            max-width: 280px; 
-            height: 44px; 
+            max-width: 320px; 
+            height: 48px; 
             border-radius: 8px; 
             font-weight: 600; 
-            font-size: 0.9rem; 
+            font-size: 0.95rem; 
             border: none; 
             cursor: pointer; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             text-decoration: none;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
-        .btn-action:hover { background: var(--hover-blue); }
+        .btn-action:hover { background: var(--hover-blue); transform: translateY(-1px); }
 
         .nav-buttons { display: none; justify-content: space-between; margin-top: 30px; gap: 15px; }
-        .nav-btn { height: 40px; padding: 0 20px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-size: 0.85rem; min-width: 100px; }
+        .nav-btn { height: 44px; padding: 0 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 0.9rem; min-width: 110px; }
         .btn-back { background: var(--bg-gray); color: var(--text-muted); border: 1px solid var(--border-color); }
         .btn-next { background: var(--primary-blue); color: white; flex-grow: 1; }
     </style>
@@ -103,28 +101,28 @@
     </div>
 
     <div class="step active" id="step0">
-        <h2>Personalize Your Lab</h2>
-        <p>Welcome! Let's start by identifying your course details to keep your lab environments organized.</p>
-        <label>Instructor Full Name</label>
+        <h2>Start Your AI Lab</h2>
+        <p>This setup will create a live e-commerce store and link it to Claude AI for advanced product analysis.</p>
+        <label>Full Name</label>
         <input type="text" id="instructorName" placeholder="e.g. Yaron Rosen">
-        <label>Course Cohort / Semester</label>
-        <input type="text" id="courseCohort" placeholder="e.g. Fall-2026-Group-A">
+        <label>Course Cohort</label>
+        <input type="text" id="courseCohort" placeholder="e.g. Feb-2026">
         <div class="btn-container">
-            <button class="btn-action" onclick="initWizard()">Initialize Wizard</button>
+            <button class="btn-action" onclick="initWizard()">Initialize Setup</button>
         </div>
     </div>
 
     <div class="step" id="step1">
-        <h2 id="h1">Vercel Cloud Connection</h2>
-        <p>Vercel is the professional cloud platform that will host your live store and database.</p>
+        <h2 id="h1">Vercel Login</h2>
+        <p>Vercel is the cloud platform that hosts your store. Log in now to ensure a smooth deployment.</p>
         <div class="btn-container">
             <a href="https://vercel.com/login" target="_blank" class="btn-action">Login to Vercel</a>
         </div>
     </div>
 
     <div class="step" id="step2">
-        <h2 id="h2">GitHub Code Storage</h2>
-        <p>GitHub securely stores your lab's code. This allows Vercel to build the store from a private blueprint.</p>
+        <h2 id="h2">GitHub Storage</h2>
+        <p>GitHub stores the code "blueprints" for your lab. Ensure you are signed in.</p>
         <div class="btn-container">
             <a href="https://github.com/login" target="_blank" class="btn-action">Login to GitHub</a>
         </div>
@@ -132,67 +130,60 @@
 
     <div class="step" id="step3">
         <h2 id="h3">Database Infrastructure</h2>
-        <p>Your store needs a <b>Postgres Database</b> to save product and customer data. We will provision this during the launch.</p>
+        <p>We will now create the <b>Postgres Database</b> that will hold all your products, customers, and orders.</p>
         <div class="info-box">
-            <b>The "No-Fail" Secret:</b> In the next step, once the Vercel screen opens, look for the <b>Storage</b> section immediately and click <b>Connect Neon Postgres</b> before doing anything else.
+            <b>Action Required:</b><br>
+            1. Go to the <b><a href="https://vercel.com/dashboard/storage" target="_blank" style="color: inherit; text-decoration: underline;">Vercel Storage Dashboard</a></b>.<br>
+            2. Click <b>Create Database</b> and select <b>Neon (Postgres)</b>.<br>
+            3. Once created, click <b>Connect</b> and copy the <b>Postgres Connection String</b> (keep it for Step 5).
         </div>
-        
     </div>
 
     <div class="step" id="step4">
-        <h2 id="h4">Deploy Your Environment</h2>
-        <p>Click the button below to trigger the deployment. Follow the prompts on the Vercel screen.</p>
+        <h2 id="h4">Deploy Lab Environment</h2>
+        <p>With the infrastructure ready, we will now launch the store. Click the button below to trigger the deployment.</p>
         <div class="info-box">
-            1. <b>Storage:</b> Click "Connect Neon Postgres" first.<br>
-            2. <b>Variable:</b> Enter <code>nextjs</code> for the onboarding type.<br>
-            3. <b>Action:</b> Click the <b>Deploy</b> button.
+            <b>Vercel Prompts:</b><br>
+            1. Look for the variable <code>MEDUSA_ADMIN_ONBOARDING_TYPE</code>.<br>
+            2. Enter the value: <code>nextjs</code>.<br>
+            3. Click the <b>Deploy</b> button.
         </div>
         <div class="btn-container">
-            <a id="deployLink" href="#" target="_blank" class="btn-action">🚀 Launch Store Setup</a>
+            <a id="deployLink" href="#" target="_blank" class="btn-action">🚀 Launch Store Deployment</a>
         </div>
     </div>
 
     <div class="step" id="step5">
-        <h2 id="h5">Access Connection String</h2>
-        <p>Now that your infrastructure is provisioned, let's grab the access key for your AI Analyst.</p>
-        <ol style="font-size: 0.85rem; color: var(--text-muted);">
-            <li>Open your Vercel Dashboard and select the new project.</li>
-            <li>Navigate to <b>Storage</b> > <b>Neon</b>.</li>
-            <li>Copy the <b>Postgres Connection String</b>.</li>
-        </ol>
-        
-    </div>
-
-    <div class="step" id="step6">
-        <h2 id="h6">Connect Claude AI</h2>
-        <p>Open Claude Desktop (Settings > MCP > Edit Config) and paste this block to link the AI to your database.</p>
+        <h2 id="h5">Claude AI Connection</h2>
+        <p>To analyze data, Claude needs to speak to your database. Paste this config into Claude Desktop (Settings > MCP > Edit Config).</p>
         <div class="code-container">
             <code>"postgresql": {
   "command": "npx",
   "args": ["-y", "@modelcontextprotocol/server-postgres", "PASTE_URL_HERE?sslmode=require"]
 }</code>
         </div>
+        <p><small>Replace <code>PASTE_URL_HERE</code> with the string you copied in Step 3.</small></p>
     </div>
 
-    <div class="step" id="step7">
-        <h2 id="h7">System Verification</h2>
-        <p>Let's confirm the connection is active. Open a new chat in Claude and ask:</p>
+    <div class="step" id="step6">
+        <h2 id="h6">System Test</h2>
+        <p>Verify your lab is operational. Open a new chat in Claude and ask:</p>
         <div class="info-box">
             "Connect to my database and tell me the names of the top 3 products in stock."
         </div>
     </div>
 
-    <div class="step" id="step8">
-        <h2>Setup Complete</h2>
-        <p>Excellent work! Your AI-powered Product Lab is now fully operational and ready for your students.</p>
+    <div class="step" id="step7">
+        <h2>Setup Successful</h2>
+        <p>Your AI Lab is live! Your instructor environment is ready for class.</p>
         <div class="btn-container">
-            <button class="btn-action" onclick="location.reload()">Restart Wizard</button>
+            <button class="btn-action" onclick="location.reload()">Finish & Reset</button>
         </div>
     </div>
 
     <div class="nav-buttons" id="navBtns">
         <button class="nav-btn btn-back" id="prevBtn" onclick="changeStep(-1)">Back</button>
-        <button class="nav-btn btn-next" id="nextBtn" onclick="changeStep(1)">Next</button>
+        <button class="nav-btn btn-next" id="nextBtn" onclick="changeStep(1)">Next Step</button>
     </div>
 </div>
 
@@ -203,7 +194,7 @@
     function initWizard() {
         const n = document.getElementById('instructorName').value.trim();
         const c = document.getElementById('courseCohort').value.trim();
-        if (!n || !c) { alert("Please fill in both fields."); return; }
+        if (!n || !c) { alert("Please complete both fields."); return; }
         instructorName = n.split(' ')[0];
         const safeN = n.replace(/\s+/g, '-').toLowerCase();
         const safeC = c.replace(/\s+/g, '-').toLowerCase();
@@ -212,7 +203,7 @@
         const envParams = "env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs";
         document.getElementById('deployLink').href = `${baseUrl}&${envParams}&project-name=${projectName}&repository-name=${projectName}`;
         
-        for(let i=1; i<=7; i++) {
+        for(let i=1; i<=6; i++) {
             const el = document.getElementById('h'+i);
             if(el) el.innerText += `, ${instructorName}`;
         }
@@ -226,14 +217,14 @@
         document.querySelectorAll('.progress-step').forEach(p => p.classList.remove('active'));
         currentStep += n;
         if (currentStep < 0) currentStep = 0;
-        if (currentStep > 8) { location.reload(); return; }
+        if (currentStep > 7) { location.reload(); return; }
         document.getElementById('step' + currentStep).classList.add('active');
         for (let i = 1; i <= currentStep; i++) {
             const p = document.getElementById('p' + i);
             if (p) p.classList.add('active');
         }
         document.getElementById('prevBtn').style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
-        document.getElementById('nextBtn').innerText = (currentStep === 8) ? 'Finish' : 'Next';
+        document.getElementById('nextBtn').innerText = (currentStep === 7) ? 'Finish' : 'Next Step';
     }
 </script>
 
