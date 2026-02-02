@@ -53,7 +53,7 @@
         p { font-size: 0.9rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px; }
         
         label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.8rem; }
-        input[type="text"] { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; margin-bottom: 20px; box-sizing: border-box; }
+        input[type="text"] { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.9rem; margin-bottom: 20px; box-sizing: border-box; }
         
         .info-box { background: #f0f7ff; border-left: 4px solid var(--primary-blue); padding: 15px; margin: 15px 0; border-radius: 4px; font-size: 0.85rem; color: #1e40af; }
         .code-container { position: relative; background: #1e293b; border-radius: 10px; padding: 15px; margin: 15px 0; }
@@ -83,7 +83,7 @@
         .nav-btn { height: 44px; padding: 0 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 0.9rem; min-width: 110px; }
         .btn-back { background: var(--bg-gray); color: var(--text-muted); border: 1px solid var(--border-color); }
         .btn-next { background: var(--primary-blue); color: white; flex-grow: 1; }
-        .btn-next:disabled { background: var(--disabled-gray); cursor: not-allowed; }
+        .btn-next:disabled { background: var(--disabled-gray); cursor: not-allowed; opacity: 0.6; }
         
         .copy-box { background: #f3f4f6; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; margin: 10px 0; display: block; text-align: center; border: 2px dashed var(--primary-blue); color: var(--primary-blue); font-weight: bold; }
     </style>
@@ -136,13 +136,15 @@
         <p>Provision your <b>Neon Postgres</b> database for the store.</p>
         <div class="info-box">
             <b>Action Required:</b><br>
-            1. Go to Vercel > <b>Add New...</b> > <b>Storage</b> > <b>Neon</b> > <b>Create</b>.<br>
-            2. Press <b>Continue</b>, then paste this unique name:<br>
+            1. Go to Vercel Dashboard > <b>Add New...</b> > <b>Storage</b>.<br>
+            2. Choose <b>Neon</b> and click <b>Create</b>.<br>
+            3. On the "Create Database" screen, press <b>Continue</b>.<br>
+            4. In the <b>Database Name (*)</b> field, paste this exact unique name:<br>
             <span id="uniqueDbName" class="copy-box">Generating...</span><br>
-            3. Press <b>Create</b>, then press <b>Done</b>.<br>
-            4. In the <b>Quickstart</b> tab, click <b>Show secret</b> and copy the <b>DATABASE_URL</b> string.
+            5. Press <b>Create</b>, and on the next page, press <b>Done</b>.<br>
+            6. In the <b>Quickstart</b> tab, click <b>Show secret</b> and copy the <b>DATABASE_URL</b>.
         </div>
-        <label>Paste your Connection String (DATABASE_URL) to continue:</label>
+        <label>Paste your <b>DATABASE_URL</b> here to unlock the next step:</label>
         <input type="text" id="dbUrlInput" placeholder="postgres://..." oninput="validateDatabaseKey()">
     </div>
 
@@ -161,7 +163,7 @@
 
     <div class="step" id="step5">
         <h2 id="h5">Claude AI Analyst</h2>
-        <p>Copy this configuration. Your connection string has been automatically injected.</p>
+        <p>Paste this config into Claude Desktop. Your key has been automatically injected.</p>
         <div class="code-container">
             <code id="mcpConfig">"postgresql": {
   "command": "npx",
@@ -204,11 +206,11 @@
         const inputVal = document.getElementById('dbUrlInput').value.trim();
         const nextBtn = document.getElementById('nextBtn');
         
-        // Enable Next button only if a valid postgres string is entered
+        // Next step is only available if string starts with postgres://
         if (inputVal.startsWith('postgres://')) {
             nextBtn.disabled = false;
             
-            // Update Claude config dynamically
+            // Dynamic update of the config block
             const configText = `"postgresql": {
   "command": "npx",
   "args": ["-y", "@modelcontextprotocol/server-postgres", "${inputVal}?sslmode=require"]
@@ -228,6 +230,7 @@
         const safeN = n.replace(/\s+/g, '-').toLowerCase();
         const safeC = c.replace(/\s+/g, '-').toLowerCase();
         
+        // Generating the unique ID
         finalProjectName = `pm-lab-${safeN}-${safeC}-${getTimestamp()}`;
         
         document.getElementById('uniqueDbName').innerText = finalProjectName;
@@ -261,14 +264,13 @@
             if (p) p.classList.add('active');
         }
         
-        // Navigation Control Logic
         const nextBtn = document.getElementById('nextBtn');
         const prevBtn = document.getElementById('prevBtn');
         
         prevBtn.style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
         nextBtn.innerText = (currentStep === 7) ? 'Finish' : 'Next Step';
         
-        // Special Case: Block Step 3 unless DB key is present
+        // Strict Gate: Database step requires validation
         if (currentStep === 3) {
             validateDatabaseKey();
         } else {
