@@ -2,153 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PM Expert | AI Lab Setup</title>
+    <title>PM Expert | AI Lab Setup v2</title>
     <style>
-        :root {
-            --primary-blue: #2563eb;
-            --text-dark: #111827;
-            --bg-gray: #f3f4f6;
-            --border-color: #d1d5db;
-        }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-gray); display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; color: var(--text-dark); }
-        .wizard-container { background: white; width: 100%; max-width: 580px; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        h1 { font-size: 1.5rem; font-weight: 800; text-align: center; margin-bottom: 30px; }
-        h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; border-bottom: 2px solid var(--bg-gray); padding-bottom: 10px; }
-        p { font-size: 1rem; line-height: 1.6; margin-bottom: 20px; }
-        .step { display: none; }
-        .step.active { display: block; animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .progress-bar { display: none; justify-content: space-between; margin-bottom: 40px; position: relative; }
-        .progress-bar::before { content: ""; background: var(--border-color); height: 2px; width: 100%; position: absolute; top: 15px; left: 0; z-index: 0; }
-        .progress-step { width: 32px; height: 32px; background: white; border: 2px solid var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; z-index: 1; color: #6b7280; }
-        .progress-step.active { background: var(--primary-blue); border-color: var(--primary-blue); color: white; }
-        label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.9rem; }
-        input[type="text"] { width: 100%; padding: 14px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 1rem; margin-bottom: 20px; box-sizing: border-box; }
-        .info-box { background: #f0f7ff; border-left: 5px solid var(--primary-blue); padding: 20px; margin: 20px 0; border-radius: 8px; }
-        .copy-box { background: #f8fafc; padding: 12px; border-radius: 8px; font-family: monospace; margin: 10px 0; display: block; text-align: center; border: 2px dashed var(--primary-blue); color: var(--primary-blue); font-weight: 800; }
-        .code-container { background: #111827; border-radius: 12px; padding: 20px; margin: 15px 0; }
-        code { color: #f3f4f6; font-family: monospace; font-size: 0.85rem; line-height: 1.5; white-space: pre; display: block; overflow-x: auto; }
-        .btn-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 20px; }
-        .btn-action { background: var(--primary-blue); color: white; width: 100%; max-width: 380px; height: 52px; border-radius: 10px; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1rem; }
-        .nav-buttons { display: none; justify-content: space-between; margin-top: 40px; gap: 20px; }
-        .nav-btn { height: 50px; padding: 0 30px; border-radius: 10px; font-weight: 700; cursor: pointer; border: none; min-width: 130px; font-size: 1rem; }
-        .btn-next { background: var(--primary-blue); color: white; flex-grow: 1; }
-        .btn-next:disabled { background: #d1d5db; cursor: not-allowed; color: #9ca3af; }
-        .badge { background: #dcfce7; color: #166534; padding: 10px 18px; border-radius: 25px; font-size: 0.85rem; font-weight: 800; display: none; margin-bottom: 20px; text-align: center; }
+        :root { --blue: #2563eb; --dark: #111827; }
+        body { font-family: 'Inter', sans-serif; background: #f3f4f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; max-width: 580px; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .info-box { background: #eff6ff; border-left: 5px solid var(--blue); padding: 20px; margin: 20px 0; border-radius: 8px; }
+        .btn { background: var(--blue); color: white; padding: 15px; border-radius: 10px; text-decoration: none; display: block; text-align: center; font-weight: bold; border: none; cursor: pointer; width: 100%; box-sizing: border-box; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; }
     </style>
 </head>
 <body>
-
-<div class="wizard-container">
-    <h1 id="mainTitle">Instructor Lab Setup</h1>
-    <div class="progress-bar" id="progressBar">
-        <div class="progress-step" id="p1">1</div><div class="progress-step" id="p2">2</div><div class="progress-step" id="p3">3</div><div class="progress-step" id="p4">4</div><div class="progress-step" id="p5">5</div><div class="progress-step" id="p6">6</div><div class="progress-step" id="p7">7</div>
+<div class="container">
+    <h2>Build Your PM Lab (Final Fix)</h2>
+    <p>This version uses the full Next.js storefront to ensure zero build errors.</p>
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="text" id="cohort" placeholder="Cohort ID (e.g. 05-11-2025)">
+    <div class="info-box">
+        <b>Database URL:</b>
+        <input type="text" id="dbUrl" placeholder="postgresql://...">
     </div>
-
-    <div class="step active" id="step0">
-        <h2>Welcome</h2>
-        <p>This setup creates a live AI-powered lab for product management analysis.</p>
-        <label>Full Name</label><input type="text" id="instructorName" placeholder="e.g. Yaron Rosen">
-        <label>Course Cohort ID</label><input type="text" id="courseCohort" placeholder="e.g. 05-11-2025">
-        <div class="btn-container"><button class="btn-action" onclick="initWizard()">Initialize Lab</button></div>
-    </div>
-
-    <div class="step" id="step1"><h2>Step 1: Vercel</h2><p>Please log in to Vercel.</p><div class="btn-container"><a href="https://vercel.com/login" target="_blank" class="btn-action">Login to Vercel</a></div></div>
-    <div class="step" id="step2"><h2>Step 2: GitHub</h2><p>Please log in to GitHub.</p><div class="btn-container"><a href="https://github.com/login" target="_blank" class="btn-action">Login to GitHub</a></div></div>
-
-    <div class="step" id="step3">
-        <h2>Step 3: Database Infrastructure</h2>
-        <div class="info-box">
-            <b>Action Required:</b>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li>Vercel Dashboard > <b>Add New...</b> > <b>Storage</b> > <b>Neon</b> > <b>Create</b>.</li>
-                <li>Press <b>Continue</b>. Name it: <span id="uniqueDbName" class="copy-box">...</span></li>
-                <li>Press <b>Create</b> > <b>Done</b>.</li>
-                <li>Go to <b>Quickstart</b> tab > <b>.env.local</b> section.</li>
-                <li>Click <b>Show secret</b> (eye icon) and copy <b>DATABASE_URL</b>.</li>
-            </ul>
-        </div>
-        <label>Paste the DATABASE_URL here:</label>
-        <input type="text" id="dbUrlInput" placeholder="postgresql://..." oninput="validateKey()">
-        <div id="validBadge" class="badge">Connection Secure ✓</div>
-    </div>
-
-    <div class="step" id="step4">
-        <h2>Step 4: Deploy Store</h2>
-        <p>We are using the official Medusa template to ensure the build environment is correctly detected by Vercel.</p>
-        <div class="info-box">
-            <b>Final Steps on Vercel:</b><br>
-            <ul style="margin: 10px 0; padding-left: 20px;">
-                <li>In the <b>Value</b> field for <b>MEDUSA_ADMIN_ONBOARDING_TYPE</b>, type: <b>nextjs</b>.</li>
-                <li>Click the black <b>Deploy</b> button.</li>
-            </ul>
-        </div>
-        <div class="btn-container"><a id="deployLink" href="#" target="_blank" class="btn-action">🚀 Launch Verified Deployment</a></div>
-    </div>
-
-    <div class="step" id="step5">
-        <h2>Step 5: Connect Claude AI</h2>
-        <div class="code-container"><code id="mcpConfig">"postgresql": { ... }</code></div>
-    </div>
-
-    <div class="step" id="step6"><h2>Step 6: Verify</h2><p>Ask Claude: "List my product categories".</p></div>
-    <div class="step" id="step7"><h2>Complete</h2><p>The lab is ready.</p><div class="btn-container"><button class="btn-action" onclick="location.reload()">Finish</button></div></div>
-
-    <div class="nav-buttons" id="navBtns">
-        <button class="nav-btn" style="background:#f1f5f9; color:#475569;" id="prevBtn" onclick="changeStep(-1)">Back</button>
-        <button class="nav-btn btn-next" id="nextBtn" onclick="changeStep(1)" disabled>Next Step</button>
-    </div>
+    <button class="btn" onclick="deploy()">🚀 Launch Lab Deployment</button>
 </div>
-
 <script>
-    let currentStep = 0;
-    let finalProjectName = "";
-
-    function getTimestamp() {
-        const now = new Date();
-        return String(now.getHours()).padStart(2, '0') + String(now.getMinutes()).padStart(2, '0') + String(now.getSeconds()).padStart(2, '0');
-    }
-
-    function validateKey() {
-        const input = document.getElementById('dbUrlInput').value.trim();
-        const nextBtn = document.getElementById('nextBtn');
-        const badge = document.getElementById('validBadge');
-        if ((input.toLowerCase().includes('postgres://') || input.toLowerCase().includes('postgresql://')) && input.length > 20) {
-            nextBtn.disabled = false;
-            badge.style.display = 'block';
-            document.getElementById('mcpConfig').innerText = `"postgresql": {\n  "command": "npx",\n  "args": ["-y", "@modelcontextprotocol/server-postgres", "${input}"]\n}`;
-        } else {
-            nextBtn.disabled = true; badge.style.display = 'none';
-        }
-    }
-
-    function initWizard() {
-        const n = document.getElementById('instructorName').value.trim();
-        const c = document.getElementById('courseCohort').value.trim();
-        if (!n || !c) return alert("Fill in details.");
-        finalProjectName = `pm-lab-${n.replace(/\s+/g, '-').toLowerCase()}-${c.replace(/\s+/g, '-').toLowerCase()}-${getTimestamp()}`;
-        document.getElementById('uniqueDbName').innerText = finalProjectName;
-        
-        // SWITCHED TO OFFICIAL VERCEL TEMPLATE FOR MEDUSA TO FORCE CORRECT BUILD ENVIRONMENT
-        const repo = "https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-medusa";
-        document.getElementById('deployLink').href = `https://vercel.com/new/clone?repository-url=${repo}&env=MEDUSA_ADMIN_ONBOARDING_TYPE&envValue=nextjs&project-name=${finalProjectName}&repository-name=${finalProjectName}`;
-        
-        const firstName = n.split(' ')[0];
-        document.getElementById('mainTitle').innerText += `, ${firstName}`;
-        document.getElementById('progressBar').style.display = 'flex';
-        document.getElementById('navBtns').style.display = 'flex';
-        changeStep(1);
-    }
-
-    function changeStep(n) {
-        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.progress-step').forEach(p => p.classList.remove('active'));
-        currentStep += n;
-        document.getElementById('step' + currentStep).classList.add('active');
-        for (let i = 1; i <= currentStep; i++) document.getElementById('p' + i).classList.add('active');
-        document.getElementById('prevBtn').style.visibility = (currentStep <= 1) ? 'hidden' : 'visible';
-        if (currentStep === 3) validateKey(); else document.getElementById('nextBtn').disabled = false;
+    function deploy() {
+        const n = document.getElementById('name').value.trim();
+        const c = document.getElementById('cohort').value.trim();
+        const db = document.getElementById('dbUrl').value.trim();
+        if(!n || !c || !db) return alert("Please fill all fields.");
+        const time = new Date().toTimeString().split(' ')[0].replace(/:/g, '');
+        const id = `pm-lab-${n}-${c}-${time}`.toLowerCase().replace(/\s+/g, '-');
+        const repo = "https%3A%2F%2Fgithub.com%2Fmedusajs%2Fnextjs-starter-medusa";
+        const deployUrl = `https://vercel.com/new/clone?repository-url=${repo}&env=DATABASE_URL&envValue=${encodeURIComponent(db)}&project-name=${id}&repository-name=${id}`;
+        window.open(deployUrl, '_blank');
     }
 </script>
 </body>
