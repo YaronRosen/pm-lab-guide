@@ -6,59 +6,69 @@
     <title>PM Expert | AI Lab Setup Wizard</title>
     <style>
         :root { --blue: #2563eb; --dark: #111827; --light: #f3f4f6; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: var(--light); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; max-width: 500px; width: 90%; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--light); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .container { background: white; max-width: 550px; width: 100%; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         h2 { color: var(--dark); margin-top: 0; border-bottom: 2px solid var(--light); padding-bottom: 10px; }
-        p { color: #4b5563; font-size: 14px; line-height: 1.5; }
-        .info-box { background: #eff6ff; border-left: 4px solid var(--blue); padding: 15px; margin: 20px 0; border-radius: 4px; font-size: 14px; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--dark); font-size: 14px; }
-        input { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
-        .btn { background: var(--blue); color: white; padding: 15px; border-radius: 10px; text-decoration: none; display: block; text-align: center; font-weight: bold; border: none; cursor: pointer; width: 100%; font-size: 16px; transition: background 0.2s; }
-        .btn:hover { background: #1d4ed8; }
+        .step { display: none; }
+        .step.active { display: block; }
+        .instruction-list { text-align: left; background: #f9fafb; padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid #e5e7eb; }
+        .instruction-list ol { margin: 0; padding-left: 20px; }
+        .instruction-list li { margin-bottom: 10px; font-size: 14px; color: #374151; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark); font-size: 14px; }
+        input { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; }
+        .btn { background: var(--blue); color: white; padding: 15px; border-radius: 10px; text-decoration: none; display: block; text-align: center; font-weight: bold; border: none; cursor: pointer; width: 100%; font-size: 16px; }
+        .btn-secondary { background: #e5e7eb; color: var(--dark); margin-top: 10px; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h2>Lab Setup Wizard v2</h2>
-    <p>This wizard will deploy a full Medusa storefront + backend. No manual settings required in Vercel.</p>
-    
-    <label for="name">Your Full Name</label>
-    <input type="text" id="name" placeholder="e.g. John Doe">
-    
-    <label for="cohort">Cohort ID</label>
-    <input type="text" id="cohort" placeholder="e.g. PM-FEB-2026">
-    
-    <div class="info-box">
-        <strong>Database URL:</strong><br>
-        Paste your Neon PostgreSQL URL below.
+    <div id="step1" class="step active">
+        <h2>Step 1: Create Database</h2>
+        <p>Before deploying the lab, you need to create a database in Vercel:</p>
+        <div class="instruction-list">
+            <ol>
+                <li>Go to your <b>Vercel Dashboard</b>.</li>
+                <li>Click the <b>Storage</b> tab at the top.</li>
+                <li>Click <b>Create Database</b> and select <b>Neon (PostgreSQL)</b>.</li>
+                <li>Follow the prompts and click <b>Create</b>.</li>
+                <li>Once created, look for <b>DATABASE_URL</b>, click the "eye" icon to reveal it, and <b>copy the full link</b>.</li>
+            </ol>
+        </div>
+        <button class="btn" onclick="nextStep()">I have the URL, continue to Step 2</button>
     </div>
-    
-    <label for="dbUrl">DATABASE_URL</label>
-    <input type="text" id="dbUrl" placeholder="postgresql://user:pass@host/db">
-    
-    <button class="btn" onclick="deploy()">🚀 Launch Deployment</button>
+
+    <div id="step2" class="step">
+        <h2>Step 2: Deploy Lab</h2>
+        <label for="name">Your Full Name</label>
+        <input type="text" id="name" placeholder="Enter your name">
+        
+        <label for="cohort">Cohort ID</label>
+        <input type="text" id="cohort" placeholder="e.g. PM-2026-A">
+        
+        <label for="dbUrl">Paste DATABASE_URL here</label>
+        <input type="text" id="dbUrl" placeholder="postgresql://neondb_owner:...">
+        
+        <button class="btn" onclick="deploy()">🚀 Launch Lab Deployment</button>
+        <button class="btn btn-secondary" onclick="prevStep()">Back to instructions</button>
+    </div>
 </div>
 
 <script>
+    function nextStep() { document.getElementById('step1').classList.remove('active'); document.getElementById('step2').classList.add('active'); }
+    function prevStep() { document.getElementById('step2').classList.remove('active'); document.getElementById('step1').classList.add('active'); }
+
     function deploy() {
         const n = document.getElementById('name').value.trim();
         const c = document.getElementById('cohort').value.trim();
         const db = document.getElementById('dbUrl').value.trim();
         
-        if(!n || !c || !db) {
-            alert("Please fill in all fields before deploying.");
-            return;
-        }
+        if(!n || !c || !db) { alert("Please fill in all fields."); return; }
 
         const timestamp = new Date().getTime().toString().slice(-6);
         const projectId = `pm-lab-${n}-${c}-${timestamp}`.toLowerCase().replace(/[^a-z0-9]/g, '-');
-        
-        // This is the official Next.js Storefront starter for Medusa
         const repo = "https%3A%2F%2Fgithub.com%2Fmedusajs%2Fnextjs-starter-medusa";
         
-        // Final Deployment URL with pre-configured environment variables
         const deployUrl = `https://vercel.com/new/clone?repository-url=${repo}&env=DATABASE_URL&envValue=${encodeURIComponent(db)}&project-name=${projectId}&repository-name=${projectId}`;
-        
         window.open(deployUrl, '_blank');
     }
 </script>
