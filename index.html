@@ -11,76 +11,79 @@
         h2 { color: var(--dark); margin-top: 0; border-bottom: 2px solid var(--light); padding-bottom: 10px; }
         .step { display: none; }
         .step.active { display: block; }
-        .instruction-list { text-align: left; background: #f9fafb; padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid #e5e7eb; }
-        .instruction-list li { margin-bottom: 10px; font-size: 14px; color: #374151; }
+        .instruction-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0; border-radius: 4px; font-size: 14px; color: #92400e; }
+        .code-block { background: #1f2937; color: #10b981; padding: 10px; border-radius: 6px; font-family: monospace; margin: 10px 0; position: relative; }
         label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark); font-size: 14px; }
         input { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; }
         .btn { background: var(--blue); color: white; padding: 15px; border-radius: 10px; text-decoration: none; display: block; text-align: center; font-weight: bold; border: none; cursor: pointer; width: 100%; font-size: 16px; transition: background 0.2s; }
-        .btn:hover { background: #1d4ed8; }
-        .btn-secondary { background: #e5e7eb; color: var(--dark); margin-top: 10px; }
+        .btn:disabled { background: #9ca3af; cursor: not-allowed; }
     </style>
 </head>
 <body>
 <div class="container">
     <div id="step1" class="step active">
-        <h2>Step 1: Lab Identity</h2>
-        <p>Enter the details for your course assignment.</p>
-        <label for="name">Instructor Name</label>
-        <input type="text" id="name" placeholder="e.g. Ran Rosen">
+        <h2>Step 1: Instructor & Course</h2>
+        <label for="name">Instructor Name (English)</label>
+        <input type="text" id="name" placeholder="e.g. RanRosen" oninput="updateName()">
         
-        <label for="cohort">Cohort ID / Date</label>
-        <input type="text" id="cohort" placeholder="e.g. Nov-2025">
+        <label for="cohort">Course Date/Cohort</label>
+        <input type="text" id="cohort" placeholder="e.g. Feb2026" oninput="updateName()">
         
-        <button class="btn" onclick="goToStep(2)">Next: Database Setup</button>
+        <button class="btn" id="btn1" onclick="goToStep(2)">Next: Database Creation</button>
     </div>
 
     <div id="step2" class="step">
-        <h2>Step 2: Create Your Database</h2>
-        <p>You need a database to store product and user data.</p>
-        <div class="instruction-list">
-            <ol>
-                <li>Go to <b>Vercel Dashboard</b>.</li>
-                <li>Click the <b>Storage</b> tab.</li>
-                <li>Click <b>Create Database</b> & select <b>Neon (PostgreSQL)</b>.</li>
-                <li>Once created, find <b>DATABASE_URL</b>, click the "eye" to reveal it, and <b>copy the full link</b>.</li>
-            </ol>
+        <h2>Step 2: Create Database</h2>
+        <p>You must use this exact name for your database:</p>
+        <div class="code-block" id="dbNameDisplay">Generating name...</div>
+        
+        <div class="instruction-box">
+            1. Go to <b>Vercel Storage</b> > <b>Create Database</b>.<br>
+            2. Select <b>Neon (PostgreSQL)</b>.<br>
+            3. Use the <b>Name above</b> for the database.<br>
+            4. Click "Create", then click the <b>"eye" icon</b> next to <b>DATABASE_URL</b>.<br>
+            5. Copy the <b>Full URL</b> and paste it below:
         </div>
-        <button class="btn" onclick="goToStep(3)">I have the URL, continue</button>
-        <button class="btn btn-secondary" onclick="goToStep(1)">Back</button>
-    </div>
 
-    <div id="step3" class="step">
-        <h2>Step 3: Launch Lab</h2>
         <label for="dbUrl">Paste DATABASE_URL here</label>
-        <input type="text" id="dbUrl" placeholder="postgresql://neondb_owner:...">
+        <input type="text" id="dbUrl" placeholder="postgresql://..." oninput="validateUrl()">
         
-        <div class="info-box" style="font-size: 12px; color: #666; margin-bottom: 10px;">
-            * Deployment will take 3-5 minutes. Follow the logs in the next screen.
-        </div>
-        
-        <button class="btn" onclick="deploy()">🚀 Launch Lab Deployment</button>
-        <button class="btn btn-secondary" onclick="goToStep(2)">Back</button>
+        <button class="btn" id="deployBtn" onclick="deploy()" disabled>🚀 Launch Lab Deployment</button>
+        <button onclick="goToStep(1)" style="margin-top:10px; background:none; border:none; color:#666; cursor:pointer; width:100%;">Back</button>
     </div>
 </div>
 
 <script>
+    let finalId = "";
+
+    function updateName() {
+        const n = document.getElementById('name').value.trim().replace(/\s+/g, '');
+        const c = document.getElementById('cohort').value.trim().replace(/\s+/g, '');
+        const ts = new Date().getTime().toString().slice(-4);
+        if(n && c) {
+            finalId = `pm-lab-${n}-${c}-${ts}`.toLowerCase();
+            document.getElementById('dbNameDisplay').innerText = finalId;
+        }
+    }
+
     function goToStep(n) {
+        if(n === 2 && (!document.getElementById('name').value || !document.getElementById('cohort').value)) {
+            alert("Please fill in Step 1 first."); return;
+        }
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         document.getElementById('step' + n).classList.add('active');
     }
 
-    function deploy() {
-        const n = document.getElementById('name').value.trim();
-        const c = document.getElementById('cohort').value.trim();
-        const db = document.getElementById('dbUrl').value.trim();
-        
-        if(!n || !c || !db) { alert("Please fill in all fields."); return; }
+    function validateUrl() {
+        const url = document.getElementById('dbUrl').value.trim();
+        document.getElementById('deployBtn').disabled = !url.startsWith("postgresql://");
+    }
 
-        const timestamp = new Date().getTime().toString().slice(-4);
-        const projectId = `pm-lab-${n}-${c}-${timestamp}`.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    function deploy() {
+        const db = document.getElementById('dbUrl').value.trim();
         const repo = "https%3A%2F%2Fgithub.com%2Fmedusajs%2Fnextjs-starter-medusa";
-        
-        const deployUrl = `https://vercel.com/new/clone?repository-url=${repo}&env=DATABASE_URL&envValue=${encodeURIComponent(db)}&project-name=${projectId}&repository-name=${projectId}`;
+        // Final link uses the exact same ID for Project name and Repo name
+        const deployUrl = `https://vercel.com/new/clone?repository-url=${repo}&env=DATABASE_URL&envValue=${encodeURIComponent(db)}&project-name=${finalId}&repository-name=${finalId}`;
         window.open(deployUrl, '_blank');
     }
 </script>
